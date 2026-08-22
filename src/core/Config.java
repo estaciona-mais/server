@@ -37,7 +37,23 @@ public interface Config {
     enum VehicleType {
         Car,
         Motorcycle,
-        Truck,
-        Bycicle
+    }
+
+    enum CarCategory {
+        Hatchback,
+        Sedan,
+        SUV,
+        Pickup,
+        Sports,
+        Minivan
+    }
+
+    enum MotorcycleCategory {
+        Scooter,
+        Commuter,
+        Touring,
+        Sports,
+        Bobber,
+        Adventure
     }
 }
