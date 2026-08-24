@@ -6,27 +6,66 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Vaga {
-    private int numeroVaga;
-    private Config.TipoVeiculo tipo;
-    private LocalDateTime dataRegistro;
-    public static int vagasTotais;
-    public static int vagasDisponiveis;
-    public static int vagasOcupadas;
+    private boolean disponivel;
+    private Veiculo veiculo;
+    private LocalDateTime dataEntrada;
+    private LocalDateTime dataSaida;
+    private final Config.TipoVeiculo tipo;
+    // TODO: vamos registrar o número dentro da classe ou apenas pegar por índice na classe do estacionamento?
+    private final int numeroVaga;
+    private static int vagasDisponiveis;
+    private static int vagasOcupadas;
+    private static int numeroVagaAtual = 0;
 
-    public Vaga(int numeroVaga, Config.TipoVeiculo tipo) {
-        this.numeroVaga = numeroVaga;
+    public Vaga(Config.TipoVeiculo tipo) throws IllegalArgumentException {
+        if (tipo == null) {
+            throw new IllegalArgumentException("O tipo do veículo deve ser informado.");
+        }
+
+        Vaga.vagasDisponiveis++;
+        Vaga.numeroVagaAtual++;
+
+        this.disponivel = true;
+        this.numeroVaga = Vaga.numeroVagaAtual;
         this.tipo = tipo;
-        this.dataRegistro = LocalDateTime.now();
+        this.veiculo = null;
+        this.dataEntrada = null;
+        this.dataSaida = null;
     }
 
-    public void registrar(Veiculo veiculo, int numeroVaga, LocalDateTime tempo) {}
+    public int getNumeroVaga() {
+        return this.numeroVaga;
+    }
 
     public String conferir() {
-        // long tempoOcupacao = LocalDateTime.now().toEpochSecond() - this.registerDate.toEpochSecond();
+        if (this.disponivel) {
+            return String.format("Número: %d\nStatus: disponível", this.numeroVaga);
+        }
+
         String tempoOcupacao =
-                Duration.between(Instant.from(this.dataRegistro), Instant.now()).toString();
+                Duration.between(Instant.from(this.dataEntrada), Instant.now()).toString();
         return String.format(
-                "Sign: %s\nRegister date: %s\nSlot: %d\nElapsed: %s\n",
-                this.placa, this.dataRegistro.toString(), this.numeroVaga, tempoOcupacao);
+                "Número: %d\nPlaca: %s\nHora de entrada: %s\nDuração: %s",
+                this.numeroVaga, this.veiculo.placa, this.dataEntrada.toString(), tempoOcupacao);
+    }
+
+    public boolean conferirDisponibilidade() {
+        return this.disponivel;
+    }
+
+    public void ocupar(Veiculo veiculo) {
+        this.disponivel = false;
+        this.veiculo = veiculo;
+        this.dataEntrada = LocalDateTime.now();
+        // TODO: nulificar a saída após a entrada de um novo veículo?
+        // this.dataSaida = null;
+        Vaga.vagasDisponiveis--;
+    }
+
+    public void liberar() {
+        this.disponivel = true;
+        this.dataSaida = LocalDateTime.now();
+        this.veiculo = null;
+        Vaga.vagasDisponiveis++;
     }
 }
