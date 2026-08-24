@@ -1,8 +1,15 @@
 package server.core;
 
 public interface Config {
-    int CAPACIDADE_VAGAS = 50;
+    int CAPACIDADE_VAGAS_CARRO = 60;
+    int CAPACIDADE_VAGAS_MOTOCICLETA = 50;
+    int CAPACIDADE_VAGAS_TOTAL = CAPACIDADE_VAGAS_CARRO + CAPACIDADE_VAGAS_MOTOCICLETA;
+    // TODO: quais inscrições nós teremos?
     double PRECO_INSCRICAO = 40;
+    // TODO: quais serão os preços de cada período?
+    double PRECO_HORA = 10;
+    double PRECO_PRIMEIRA_HORA = 10;
+    double PRECO_DIARIA = 30;
 
     enum PerfilUsuario {
         Administrador,
