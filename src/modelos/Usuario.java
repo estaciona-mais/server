@@ -27,7 +27,7 @@ public abstract class Usuario {
     }
 
     public void updateNome(String novoNome) throws IllegalArgumentException {
-        updateDado(novoNome, "Um e-mail", () -> this.nome = novoNome);
+        updateDado(novoNome, "Um nome", () -> this.nome = novoNome);
     }
 
     public void updateEmail(String novoEmail) throws IllegalArgumentException {
