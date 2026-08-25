@@ -14,8 +14,7 @@ public abstract class Usuario {
 
         this.nome = nome;
         this.email = email;
-        // TODO: senha deve ser processada com hash
-        this.senha = senha;
+        this.senha = Utils.hashSenha(senha);
     }
 
     public String getNome() {
@@ -35,8 +34,8 @@ public abstract class Usuario {
     }
 
     public void updateSenha(String novaSenha) throws IllegalArgumentException {
-        // TODO: processamento da senha com hash
-        updateDado(novaSenha, "Uma senha", () -> this.senha = novaSenha);
+        String hashedSenha = Utils.hashSenha(novaSenha);
+        updateDado(novaSenha, "Uma senha", () -> this.senha = hashedSenha);
     }
 
     private void updateDado(String novoDado, String campo, Utils.Set callback) throws IllegalArgumentException {
