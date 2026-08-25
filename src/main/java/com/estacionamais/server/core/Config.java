@@ -1,4 +1,4 @@
-package server.core;
+package com.estacionamais.core;
 
 public interface Config {
     int CAPACIDADE_VAGAS_CARRO = 60;

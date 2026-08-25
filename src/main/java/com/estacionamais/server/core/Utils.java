@@ -1,4 +1,4 @@
-package server.core;
+package com.estacionamais.core;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -31,6 +31,7 @@ public final class Utils {
         }
     }
 
+    @FunctionalInterface
     public interface Set {
         void set();
     }

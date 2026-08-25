@@ -1,4 +1,4 @@
-package server.modelos;
+package com.estacionamais.modelos;
 
 import server.core.Utils;
 

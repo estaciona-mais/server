@@ -1,4 +1,4 @@
-package server.servicos;
+package com.estacionamais.servicos;
 
 import modelos.Usuario;
 
