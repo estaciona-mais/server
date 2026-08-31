@@ -4,12 +4,11 @@ public interface Config {
     int CAPACIDADE_VAGAS_CARRO = 60;
     int CAPACIDADE_VAGAS_MOTOCICLETA = 50;
     int CAPACIDADE_VAGAS_TOTAL = CAPACIDADE_VAGAS_CARRO + CAPACIDADE_VAGAS_MOTOCICLETA;
-    // TODO: quais inscrições nós teremos?
-    double PRECO_INSCRICAO = 40;
-    // TODO: quais serão os preços de cada período?
-    double PRECO_HORA = 10;
-    double PRECO_PRIMEIRA_HORA = 10;
-    double PRECO_DIARIA = 30;
+    double PRECO_INSCRICAO_MENSAL = 40;
+    double PRECO_INSCRICAO_BIMENSTRAL = 64;
+    double PRECO_INSCRICAO_TRIMESTRAL = 84;
+    double PRECO_INSCRICAO_SEMESTRAL = 134;
+    double PRECO_INSCRICAO_ANUAL = 214;
 
     enum PerfilUsuario {
         Administrador,
