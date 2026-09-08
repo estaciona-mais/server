@@ -1,52 +1,69 @@
-package com.estacionamais.modelos;
+package com.estacionamais.server.model;
 
-import core.Config;
+import com.estacionamais.server.core.Config;
+import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "vaga")
 public class Vaga {
-    private boolean disponivel;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "veiculo_id", nullable = false)
     private Veiculo veiculo;
+
+    @Column(nullable = false)
+    private Integer numero;
+
+    @Column(nullable = false)
+    private Boolean disponivel;
+
+    @Column(nullable = false)
     private LocalDateTime dataEntrada;
+
+    @Column(nullable = false)
     private LocalDateTime dataSaida;
-    private final Config.TipoVeiculo tipo;
-    // TODO: vamos registrar o número dentro da classe ou apenas pegar por índice na classe do estacionamento?
-    private final int numeroVaga;
+
     private static int vagasDisponiveis;
-    private static int vagasOcupadas;
-    private static int numeroVagaAtual = 0;
+    private static int vagasOcupadas = 0;
 
     public Vaga(Config.TipoVeiculo tipo) throws IllegalArgumentException {
         if (tipo == null) {
             throw new IllegalArgumentException("O tipo do veículo deve ser informado.");
         }
 
-        Vaga.vagasDisponiveis++;
-        Vaga.numeroVagaAtual++;
+        Vaga.vagasDisponiveis--;
+        Vaga.vagasOcupadas++;
+        Vaga.vagasDisponiveis = switch (tipo) {
+            case Carro -> Config.CAPACIDADE_VAGAS_CARRO;
+            case Motocicleta -> Config.CAPACIDADE_VAGAS_MOTOCICLETA;
+        };
 
         this.disponivel = true;
-        this.numeroVaga = Vaga.numeroVagaAtual;
-        this.tipo = tipo;
         this.veiculo = null;
         this.dataEntrada = null;
         this.dataSaida = null;
     }
 
-    public int getNumeroVaga() {
-        return this.numeroVaga;
+    public int getNumero() {
+        return this.numero;
     }
 
-    public String conferir() {
+    public String conferirStatus() {
         if (this.disponivel) {
-            return String.format("Número: %d\nStatus: disponível", this.numeroVaga);
+            return String.format("Número: %d\nStatus: disponível", this.numero);
         }
 
         String tempoOcupacao =
                 Duration.between(Instant.from(this.dataEntrada), Instant.now()).toString();
         return String.format(
                 "Número: %d\nPlaca: %s\nHora de entrada: %s\nDuração: %s",
-                this.numeroVaga, this.veiculo.placa, this.dataEntrada.toString(), tempoOcupacao);
+                this.numero, this.veiculo.getPlaca(), this.dataEntrada.toString(), tempoOcupacao);
     }
 
     public boolean conferirDisponibilidade() {
@@ -55,7 +72,7 @@ public class Vaga {
 
     public void ocupar(Veiculo veiculo) {
         this.disponivel = false;
-        this.veiculo = veiculo;
+        // this.veiculo = veiculo;
         this.dataEntrada = LocalDateTime.now();
         // TODO: nulificar a saída após a entrada de um novo veículo?
         // this.dataSaida = null;
@@ -65,7 +82,7 @@ public class Vaga {
     public void liberar() {
         this.disponivel = true;
         this.dataSaida = LocalDateTime.now();
-        this.veiculo = null;
+        // this.veiculo = null;
         Vaga.vagasDisponiveis++;
     }
 }
