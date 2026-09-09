@@ -1,6 +1,7 @@
-package com.estacionamais.servicos;
+package com.estacionamais.server.service;
 
-import modelos.Usuario;
+import com.estacionamais.server.model.Usuario;
+import com.estacionamais.server.model.Vaga;
 
 public class Estacionamento {
     private Usuario[] usuarios;
