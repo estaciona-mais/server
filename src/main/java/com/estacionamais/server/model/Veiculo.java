@@ -2,6 +2,8 @@ package com.estacionamais.server.model;
 
 import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.CharJdbcType;
 
 @Entity
 @Table(name = "veiculo")
@@ -10,10 +12,11 @@ public abstract class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @JdbcType(CharJdbcType.class)
     @Column(nullable = false)
     private String placa;
 
@@ -39,20 +42,7 @@ public abstract class Veiculo {
 
     protected static int contagemVeiculos;
 
-    protected Veiculo(Cliente cliente, String placa, String modelo, Config.CorVeiculo cor, Config.TipoVeiculo tipo)
-            throws IllegalArgumentException {
-        Veiculo.checkArguments(placa, modelo, cor, tipo);
-        if (cliente == null) {
-            throw new IllegalArgumentException("Um cliente deve ser informado para registrar um veículo.");
-        }
-
-        this.cliente = cliente;
-        this.placa = placa;
-        this.modelo = modelo;
-        this.cor = cor;
-        this.tipo = tipo;
-        Veiculo.contagemVeiculos++;
-    }
+    public Veiculo() {}
 
     public String getPlaca() {
         return this.placa;

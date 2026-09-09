@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Entity
 @Table(name = "usuario")
-public abstract class Usuario {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,25 +17,14 @@ public abstract class Usuario {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, name = "senha_hash")
     private String senhaHash;
 
     // @Enumerated(value = EnumType.STRING)
     // @Column(nullable = false)
     // private final Config.PerfilUsuario perfil;
 
-    protected Usuario(String nome, String email, String senha /*, Config.PerfilUsuario perfil*/)
-            throws IllegalArgumentException, NoSuchAlgorithmException {
-        Utils.conferirCredenciais(nome, email, senha);
-        // if (perfil == null) {
-        //     throw new IllegalArgumentException("O usuário deve conter um perfil para a criação.");
-        // }
-
-        this.nome = nome;
-        this.email = email;
-        this.senhaHash = Utils.hashSenha(senha);
-        // this.perfil = perfil;
-    }
+    public Usuario() {}
 
     public String getNome() {
         return this.nome;

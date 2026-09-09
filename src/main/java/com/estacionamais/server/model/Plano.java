@@ -15,10 +15,7 @@ public class Plano {
     @Column(nullable = false, length = 10)
     private String titulo;
 
-    public Plano(String titulo, int valor) {
-        this.titulo = titulo;
-        this.valor = valor / 100;
-    }
+    public Plano() {}
 
     public int getValor() {
         return this.valor;

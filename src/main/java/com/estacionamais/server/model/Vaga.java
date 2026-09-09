@@ -1,6 +1,5 @@
 package com.estacionamais.server.model;
 
-import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.Instant;
@@ -29,26 +28,10 @@ public class Vaga {
     @Column(nullable = false)
     private LocalDateTime dataSaida;
 
-    private static int vagasDisponiveis;
-    private static int vagasOcupadas = 0;
+    // private static int vagasDisponiveis;
+    // private static int vagasOcupadas = 0;
 
-    public Vaga(Config.TipoVeiculo tipo) throws IllegalArgumentException {
-        if (tipo == null) {
-            throw new IllegalArgumentException("O tipo do veículo deve ser informado.");
-        }
-
-        Vaga.vagasDisponiveis--;
-        Vaga.vagasOcupadas++;
-        Vaga.vagasDisponiveis = switch (tipo) {
-            case Carro -> Config.CAPACIDADE_VAGAS_CARRO;
-            case Motocicleta -> Config.CAPACIDADE_VAGAS_MOTOCICLETA;
-        };
-
-        this.disponivel = true;
-        this.veiculo = null;
-        this.dataEntrada = null;
-        this.dataSaida = null;
-    }
+    public Vaga() {}
 
     public int getNumero() {
         return this.numero;
@@ -76,13 +59,13 @@ public class Vaga {
         this.dataEntrada = LocalDateTime.now();
         // TODO: nulificar a saída após a entrada de um novo veículo?
         // this.dataSaida = null;
-        Vaga.vagasDisponiveis--;
+        // Vaga.vagasDisponiveis--;
     }
 
     public void liberar() {
         this.disponivel = true;
         this.dataSaida = LocalDateTime.now();
         // this.veiculo = null;
-        Vaga.vagasDisponiveis++;
+        // Vaga.vagasDisponiveis++;
     }
 }

@@ -1,7 +1,9 @@
 package com.estacionamais.server.model;
 
+import java.security.NoSuchAlgorithmException;
+
 public class Operador extends Usuario {
-    public Operador(String nome, String email, String senha) {
+    public Operador(String nome, String email, String senha) throws NoSuchAlgorithmException {
         super(nome, email, senha);
     }
 
@@ -11,5 +13,5 @@ public class Operador extends Usuario {
 
     public void registrarPagamento() {}
 
-    public boolean conferirVaga(int numeroVaga) {}
+    // public boolean conferirVaga(int numeroVaga) {}
 }

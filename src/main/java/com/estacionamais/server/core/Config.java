@@ -13,7 +13,7 @@ public interface Config {
     enum PerfilUsuario {
         Administrador,
         Operador,
-        Mensalista
+        Cliente
     }
 
     enum MetodoPagamento {

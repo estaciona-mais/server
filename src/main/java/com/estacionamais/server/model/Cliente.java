@@ -2,12 +2,11 @@ package com.estacionamais.server.model;
 
 import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "cliente")
-public class Cliente extends Usuario {
+// @Table(name = "cliente")
+public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,13 +32,7 @@ public class Cliente extends Usuario {
     @Column(nullable = false)
     private Config.StatusContrato statusContrato;
 
-    public Cliente(Plano plano, String nome, String email, String senha, Config.PerfilUsuario perfil)
-            throws IllegalArgumentException, NoSuchAlgorithmException {
-        super(nome, email, senha, perfil);
-        if (plano == null) {
-            throw new IllegalArgumentException("Um plano deve ser informado para criar um cliente.");
-        }
-    }
+    public Cliente() {}
 
     public Config.StatusContrato getStatusContrato() {
         return this.statusContrato;
@@ -49,5 +42,5 @@ public class Cliente extends Usuario {
         this.statusContrato = novoStatus;
     }
 
-    public String[] getHistoricoAcesso() {}
+    // public String[] getHistoricoAcesso() {}
 }

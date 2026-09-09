@@ -1,6 +1,8 @@
 package com.estacionamais.server.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.CharJdbcType;
 
 @Entity
 @Table(name = "endereco")
@@ -13,9 +15,11 @@ public class Endereco {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @JdbcType(CharJdbcType.class)
     @Column(nullable = false, length = 2)
     private String uf;
 
+    @JdbcType(CharJdbcType.class)
     @Column(nullable = false, length = 9)
     private String cep;
 
@@ -34,24 +38,7 @@ public class Endereco {
     @Column(length = 32)
     private String complemento;
 
-    public Endereco(
-            Cliente cliente,
-            String uf,
-            String cep,
-            String cidade,
-            String bairro,
-            String rua,
-            int numero,
-            String complemento) {
-        this.uf = uf;
-        this.cep = cep;
-        this.cidade = cidade;
-        this.bairro = bairro;
-        this.rua = rua;
-        this.numero = numero;
-        this.complemento = !complemento.isBlank() ? complemento : "";
-        this.cliente = cliente;
-    }
+    public Endereco() {}
 
     public String getUf() {
         return this.uf;
