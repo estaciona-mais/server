@@ -1,6 +1,5 @@
 package com.estacionamais.server.model;
 
-import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -24,7 +23,7 @@ public class Pagamento {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Config.MetodoPagamento metodoPagamento;
+    private MetodoPagamento metodoPagamento;
 
     public Pagamento() {}
 
@@ -32,7 +31,7 @@ public class Pagamento {
         return this.data;
     }
 
-    public Config.MetodoPagamento getMetodoPagamento() {
+    public MetodoPagamento getMetodoPagamento() {
         return this.metodoPagamento;
     }
 }

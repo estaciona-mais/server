@@ -1,5 +1,5 @@
 package com.estacionamais.server.dto;
 
-import com.estacionamais.server.core.Config;
+import com.estacionamais.server.model.Papel;
 
-public record FichaUsuario(Long id, String nome, String email, String senhaHash, Config.PerfilUsuario papel) {}
+public record FichaUsuario(Long id, String nome, String email, String senhaHash, Papel papel) {}

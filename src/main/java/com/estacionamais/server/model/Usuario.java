@@ -1,6 +1,5 @@
 package com.estacionamais.server.model;
 
-import com.estacionamais.server.core.Config;
 import com.estacionamais.server.core.Utils;
 import jakarta.persistence.*;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +22,7 @@ public class Usuario {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Config.PerfilUsuario papel = Config.PerfilUsuario.CLIENTE;
+    private Papel papel = Papel.CLIENTE;
 
     public Usuario() {}
 
@@ -43,7 +42,7 @@ public class Usuario {
         return this.senhaHash;
     }
 
-    public Config.PerfilUsuario getPapel() {
+    public Papel getPapel() {
         return this.papel;
     }
 

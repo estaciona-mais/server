@@ -1,6 +1,5 @@
 package com.estacionamais.server.model;
 
-import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.CharJdbcType;
@@ -31,14 +30,14 @@ public abstract class Veiculo {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Config.CorVeiculo cor;
+    private CorVeiculo cor;
 
     @Column
     private String observacao;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Config.TipoVeiculo tipo;
+    private TipoVeiculo tipo;
 
     protected static int contagemVeiculos;
 
@@ -52,7 +51,7 @@ public abstract class Veiculo {
         return this.modelo;
     }
 
-    static void checkArguments(String placa, String modelo, Config.CorVeiculo cor, Config.TipoVeiculo tipo)
+    static void checkArguments(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)
             throws IllegalArgumentException {
         if (placa == null || placa.isBlank()) {
             throw new IllegalArgumentException("Placa do veículo vazia.");
@@ -65,7 +64,7 @@ public abstract class Veiculo {
         }
     }
 
-    static void cadastrarVeiculo(String placa, String modelo, Config.CorVeiculo cor, Config.TipoVeiculo tipo)
+    static void cadastrarVeiculo(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)
             throws IllegalArgumentException {
         Veiculo.checkArguments(placa, modelo, cor, tipo);
 

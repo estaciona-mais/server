@@ -1,6 +1,5 @@
 package com.estacionamais.server.model;
 
-import com.estacionamais.server.core.Config;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -30,15 +29,15 @@ public class Cliente {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Config.StatusContrato statusContrato;
+    private StatusContrato statusContrato;
 
     public Cliente() {}
 
-    public Config.StatusContrato getStatusContrato() {
+    public StatusContrato getStatusContrato() {
         return this.statusContrato;
     }
 
-    public void atualizarStatusContrato(Config.StatusContrato novoStatus) {
+    public void atualizarStatusContrato(StatusContrato novoStatus) {
         this.statusContrato = novoStatus;
     }
 
