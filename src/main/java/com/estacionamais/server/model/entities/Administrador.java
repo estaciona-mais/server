@@ -1,7 +1,7 @@
-package com.estacionamais.server.model;
+package com.estacionamais.server.model.entities;
 
 import com.estacionamais.server.core.Utils;
-// import jakarta.persistence.*;
+import com.estacionamais.server.model.enums.*;
 import java.security.NoSuchAlgorithmException;
 
 public class Administrador extends Usuario {

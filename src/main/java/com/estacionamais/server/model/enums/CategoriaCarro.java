@@ -1,4 +1,4 @@
-package com.estacionamais.server.model;
+package com.estacionamais.server.model.enums;
 
 public enum CategoriaCarro {
     HATCHBACK,

@@ -1,5 +1,6 @@
-package com.estacionamais.server.model;
+package com.estacionamais.server.model.entities;
 
+import com.estacionamais.server.model.enums.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.CharJdbcType;

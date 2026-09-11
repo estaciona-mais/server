@@ -1,4 +1,4 @@
-package com.estacionamais.server.model;
+package com.estacionamais.server.model.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;

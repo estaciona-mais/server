@@ -1,7 +1,7 @@
 package com.estacionamais.server.service;
 
 import com.estacionamais.server.dto.FichaUsuario;
-import com.estacionamais.server.model.Usuario;
+import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.repository.UsuarioRepository;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,7 @@
-package com.estacionamais.server.model;
+package com.estacionamais.server.model.entities;
 
 import com.estacionamais.server.core.Utils;
+import com.estacionamais.server.model.enums.*;
 import jakarta.persistence.*;
 import java.security.NoSuchAlgorithmException;
 
