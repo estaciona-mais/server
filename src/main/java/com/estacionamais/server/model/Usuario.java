@@ -1,5 +1,6 @@
 package com.estacionamais.server.model;
 
+import com.estacionamais.server.core.Config;
 import com.estacionamais.server.core.Utils;
 import jakarta.persistence.*;
 import java.security.NoSuchAlgorithmException;
@@ -17,14 +18,18 @@ public class Usuario {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 255, name = "senha_hash")
+    @Column(nullable = false, length = 255)
     private String senhaHash;
 
-    // @Enumerated(value = EnumType.STRING)
-    // @Column(nullable = false)
-    // private final Config.PerfilUsuario perfil;
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private Config.PerfilUsuario papel = Config.PerfilUsuario.CLIENTE;
 
     public Usuario() {}
+
+    public Long getId() {
+        return this.id;
+    }
 
     public String getNome() {
         return this.nome;
@@ -32,6 +37,14 @@ public class Usuario {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public String getSenha() {
+        return this.senhaHash;
+    }
+
+    public Config.PerfilUsuario getPapel() {
+        return this.papel;
     }
 
     // TODO: atualizar os valores no banco

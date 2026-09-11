@@ -7,9 +7,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Administrador extends Usuario {
     public Administrador(String nome, String email, String senha, Config.PerfilUsuario perfil)
-            throws NoSuchAlgorithmException {
-        super(nome, email, senha);
-    }
+            throws NoSuchAlgorithmException {}
 
     // public String getUsuario(String nomeUsuario) {}
 

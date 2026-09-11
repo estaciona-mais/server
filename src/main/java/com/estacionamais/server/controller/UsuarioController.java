@@ -24,6 +24,11 @@ public class UsuarioController {
         return usuarioService.buscarPorId(id).orElse(null);
     }
 
+    @GetMapping("/nome/{id}")
+    public String buscarNomePorId(@PathVariable Long id) {
+        return usuarioService.buscarPorId(id).orElse(null).nome();
+    }
+
     @GetMapping("/buscar")
     public List<FichaUsuario> buscar(@RequestParam(required = false) String termo) {
         return usuarioService.listarTodos().stream()

@@ -11,9 +11,9 @@ public interface Config {
     double PRECO_INSCRICAO_ANUAL = 214;
 
     enum PerfilUsuario {
-        Administrador,
-        Operador,
-        Cliente
+        ADMIN,
+        OPERADOR,
+        CLIENTE
     }
 
     enum MetodoPagamento {
