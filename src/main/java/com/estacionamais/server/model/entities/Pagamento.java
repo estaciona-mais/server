@@ -2,7 +2,7 @@ package com.estacionamais.server.model.entities;
 
 import com.estacionamais.server.model.enums.*;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "pagamento")
@@ -20,7 +20,7 @@ public class Pagamento {
     private Cliente cliente;
 
     @Column(nullable = false)
-    private LocalDateTime data;
+    private OffsetDateTime data;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
@@ -28,7 +28,19 @@ public class Pagamento {
 
     public Pagamento() {}
 
-    public LocalDateTime getData() {
+    public Long getId() {
+        return this.id;
+    }
+
+    public Plano getPlano() {
+        return this.plano;
+    }
+
+    public Cliente getCliente() {
+        return this.cliente;
+    }
+
+    public OffsetDateTime getData() {
         return this.data;
     }
 

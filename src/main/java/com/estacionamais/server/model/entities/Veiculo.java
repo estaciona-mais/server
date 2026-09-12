@@ -7,7 +7,7 @@ import org.hibernate.type.descriptor.jdbc.CharJdbcType;
 
 @Entity
 @Table(name = "veiculo")
-public abstract class Veiculo {
+public class Veiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,12 +44,44 @@ public abstract class Veiculo {
 
     public Veiculo() {}
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public Cliente getCliente() {
+        return this.cliente;
+    }
+
+    public String getNomeCliente() {
+        return this.getCliente().getNome();
+    }
+
     public String getPlaca() {
         return this.placa;
     }
 
+    public String getFabricante() {
+        return this.fabricante;
+    }
+
     public String getModelo() {
         return this.modelo;
+    }
+
+    public Integer getAno() {
+        return this.ano;
+    }
+
+    public CorVeiculo getCor() {
+        return this.cor;
+    }
+
+    public TipoVeiculo getTipo() {
+        return this.tipo;
+    }
+
+    public String getObservacao() {
+        return this.observacao;
     }
 
     static void checkArguments(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)

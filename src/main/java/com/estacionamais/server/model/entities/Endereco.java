@@ -40,6 +40,18 @@ public class Endereco {
 
     public Endereco() {}
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public Cliente getCliente() {
+        return this.cliente;
+    }
+
+    public String getNomeCliente() {
+        return this.getCliente().getNome();
+    }
+
     public String getUf() {
         return this.uf;
     }

@@ -1,9 +1,10 @@
 package com.estacionamais.server.model.entities;
 
+import com.estacionamais.server.model.enums.TipoVeiculo;
 import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "vaga")
@@ -23,18 +24,46 @@ public class Vaga {
     private Boolean disponivel;
 
     @Column(nullable = false)
-    private LocalDateTime dataEntrada;
+    private OffsetDateTime dataEntrada;
 
     @Column(nullable = false)
-    private LocalDateTime dataSaida;
+    private OffsetDateTime dataSaida;
 
     // private static int vagasDisponiveis;
     // private static int vagasOcupadas = 0;
 
     public Vaga() {}
 
-    public int getNumero() {
+    public Long getId() {
+        return this.id;
+    }
+
+    public Veiculo getVeiculo() {
+        return this.veiculo;
+    }
+
+    public Cliente getCliente() {
+        return this.getVeiculo().getCliente();
+    }
+
+    public String getPlaca() {
+        return this.getVeiculo().getPlaca();
+    }
+
+    public Integer getNumero() {
         return this.numero;
+    }
+
+    public TipoVeiculo getTipo() {
+        return this.getVeiculo().getTipo();
+    }
+
+    public OffsetDateTime getDataEntrada() {
+        return this.dataEntrada;
+    }
+
+    public OffsetDateTime getDataSaida() {
+        return this.dataSaida;
     }
 
     public String conferirStatus() {
@@ -56,7 +85,7 @@ public class Vaga {
     public void ocupar(Veiculo veiculo) {
         this.disponivel = false;
         // this.veiculo = veiculo;
-        this.dataEntrada = LocalDateTime.now();
+        this.dataEntrada = OffsetDateTime.now();
         // TODO: nulificar a saída após a entrada de um novo veículo?
         // this.dataSaida = null;
         // Vaga.vagasDisponiveis--;
@@ -64,7 +93,7 @@ public class Vaga {
 
     public void liberar() {
         this.disponivel = true;
-        this.dataSaida = LocalDateTime.now();
+        this.dataSaida = OffsetDateTime.now();
         // this.veiculo = null;
         // Vaga.vagasDisponiveis++;
     }
