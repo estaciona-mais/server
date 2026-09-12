@@ -1,5 +1,6 @@
-package com.estacionamais.server.model.entities;
+package com.estacionamais.server.model;
 
+import com.estacionamais.server.model.entities.Usuario;
 import java.security.NoSuchAlgorithmException;
 
 public class Operador extends Usuario {

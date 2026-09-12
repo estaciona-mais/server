@@ -1,6 +1,7 @@
-package com.estacionamais.server.model.entities;
+package com.estacionamais.server.model;
 
 import com.estacionamais.server.core.Utils;
+import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.*;
 import java.security.NoSuchAlgorithmException;
 
