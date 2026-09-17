@@ -1,4 +1,4 @@
-package com.estacionamais.core;
+package com.estacionamais.server.core;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
