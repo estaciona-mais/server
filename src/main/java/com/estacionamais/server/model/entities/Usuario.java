@@ -25,26 +25,62 @@ public class Usuario {
     @Column(nullable = false)
     private Papel papel = Papel.CLIENTE;
 
-    public Usuario() {}
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Provider provider = Provider.LOCAL;
+
+    @Column(length = 120)
+    private String providerId;
+
+    public Usuario() {
+    }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
-        return this.nome;
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
-    public String getSenha() {
-        return this.senhaHash;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenhaHash() {
+        return senhaHash;
+    }
+
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
     }
 
     public Papel getPapel() {
-        return this.papel;
+        return papel;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
+    }
+
+    public void setPapel(Papel papel) {
+        this.papel = papel;
     }
 
     // TODO: atualizar os valores no banco
