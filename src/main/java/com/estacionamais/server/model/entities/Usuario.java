@@ -4,6 +4,7 @@ import com.estacionamais.server.core.Utils;
 import com.estacionamais.server.model.enums.*;
 import jakarta.persistence.*;
 import java.security.NoSuchAlgorithmException;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "usuario")
@@ -31,6 +32,12 @@ public class Usuario {
 
     @Column(length = 120)
     private String providerId;
+
+    @Column(nullable = false, length = 60)
+    private String stripeCustomerId;
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    private OffsetDateTime criadoEm = OffsetDateTime.now();
 
     public Usuario() {
     }
