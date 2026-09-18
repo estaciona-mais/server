@@ -24,9 +24,10 @@ public class Pagamento {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private MetodoPagamento metodoPagamento;
+    private MetodoPagamento metodo;
 
-    public Pagamento() {}
+    public Pagamento() {
+    }
 
     public Long getId() {
         return this.id;
@@ -44,7 +45,7 @@ public class Pagamento {
         return this.data;
     }
 
-    public MetodoPagamento getMetodoPagamento() {
-        return this.metodoPagamento;
+    public MetodoPagamento getMetodo() {
+        return this.metodo;
     }
 }
