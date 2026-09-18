@@ -1,9 +1,23 @@
 package com.estacionamais.server.model.entities;
 
-import com.estacionamais.server.model.enums.*;
-import jakarta.persistence.*;
+import com.estacionamais.server.core.Utils;
+import com.estacionamais.server.model.enums.CorVeiculo;
+import com.estacionamais.server.model.enums.TipoVeiculo;
+
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.CharJdbcType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "veiculo")
@@ -42,7 +56,8 @@ public class Veiculo {
 
     protected static int contagemVeiculos;
 
-    public Veiculo() {}
+    public Veiculo() {
+    }
 
     public Long getId() {
         return this.id;
@@ -84,13 +99,14 @@ public class Veiculo {
         return this.observacao;
     }
 
-    static void checkArguments(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)
+    static void conferirCampos(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)
             throws IllegalArgumentException {
-        if (placa == null || placa.isBlank()) {
-            throw new IllegalArgumentException("Placa do veículo vazia.");
-        } else if (modelo == null || modelo.isBlank()) {
-            throw new IllegalArgumentException("Modelo do veículo vazio.");
-        } else if (cor == null) {
+        Utils.conferirCamposString(new String[][] {
+                { placa, "Placa do veículo vazia." },
+                { modelo, "Modelo do veículo vazia." },
+        });
+
+        if (cor == null) {
             throw new IllegalArgumentException("A cor do veículo deve ser especificada.");
         } else if (tipo == null) {
             throw new IllegalArgumentException("O tipo do veículo deve ser especificado.");
@@ -99,7 +115,7 @@ public class Veiculo {
 
     static void cadastrarVeiculo(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)
             throws IllegalArgumentException {
-        Veiculo.checkArguments(placa, modelo, cor, tipo);
+        Veiculo.conferirCampos(placa, modelo, cor, tipo);
 
         // TODO: salvar veículo no database
         Veiculo.contagemVeiculos++;
