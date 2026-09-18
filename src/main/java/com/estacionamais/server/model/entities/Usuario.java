@@ -49,22 +49,15 @@ public class Usuario {
 
     // TODO: atualizar os valores no banco
     public void atualizarNome(String novoNome) throws IllegalArgumentException {
-        atualizarDado(novoNome, "Um nome", () -> this.nome = novoNome);
+        Utils.atualizarDado(novoNome, "Um nome", () -> this.nome = novoNome);
     }
 
     public void atualizarEmail(String novoEmail) throws IllegalArgumentException {
-        atualizarDado(novoEmail, "Um e-mail", () -> this.email = novoEmail);
+        Utils.atualizarDado(novoEmail, "Um e-mail", () -> this.email = novoEmail);
     }
 
     public void atualizarSenha(String novaSenha) throws IllegalArgumentException, NoSuchAlgorithmException {
         String hashedSenha = Utils.hashSenha(novaSenha);
-        atualizarDado(novaSenha, "Uma senha", () -> this.senhaHash = hashedSenha);
-    }
-
-    private void atualizarDado(String novoDado, String campo, Utils.Set callback) throws IllegalArgumentException {
-        if (novoDado == null || novoDado.isBlank()) {
-            throw new IllegalArgumentException(String.format("%s deve ser informado para a atualização.", campo));
-        }
-        callback.set();
+        Utils.atualizarDado(novaSenha, "Uma senha", () -> this.senhaHash = hashedSenha);
     }
 }
