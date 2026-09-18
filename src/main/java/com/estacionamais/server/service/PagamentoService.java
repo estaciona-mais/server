@@ -24,7 +24,7 @@ public class PagamentoService {
                 pagamento.getPlano().getTitulo().toString(),
                 pagamento.getCliente().getNome(),
                 pagamento.getData(),
-                pagamento.getMetodoPagamento());
+                pagamento.getMetodo());
     }
 
     // TODO: busca por cliente ou intervalo de data|valor
