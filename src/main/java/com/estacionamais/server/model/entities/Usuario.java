@@ -20,7 +20,7 @@ public class Usuario {
     private String email;
 
     @Column(nullable = false, length = 255)
-    private String senhaHash;
+    private String senha;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
@@ -32,12 +32,6 @@ public class Usuario {
 
     @Column(length = 120)
     private String providerId;
-
-    @Column(nullable = false, length = 60)
-    private String stripeCustomerId;
-
-    @Column(nullable = false, insertable = false, updatable = false)
-    private OffsetDateTime criadoEm = OffsetDateTime.now();
 
     public Usuario() {
     }
@@ -66,12 +60,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getSenhaHash() {
-        return senhaHash;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
+    public void setSenha(String senhaHash) {
+        this.senha = senhaHash;
     }
 
     public Papel getPapel() {
@@ -84,6 +78,14 @@ public class Usuario {
 
     public void setProvider(Provider provider) {
         this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 
     public void setPapel(Papel papel) {
@@ -101,6 +103,6 @@ public class Usuario {
 
     public void atualizarSenha(String novaSenha) throws IllegalArgumentException, NoSuchAlgorithmException {
         String hashedSenha = Utils.hashSenha(novaSenha);
-        Utils.atualizarDado(novaSenha, "Uma senha", () -> this.senhaHash = hashedSenha);
+        Utils.atualizarDado(novaSenha, "Uma senha", () -> this.senha = hashedSenha);
     }
 }

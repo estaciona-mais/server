@@ -30,7 +30,7 @@ public class UsuarioService {
 
     private FichaUsuario paraDto(Usuario usuario) {
         return new FichaUsuario(
-                usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenhaHash(), usuario.getPapel());
+                usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.getPapel());
     }
 
     public Optional<FichaUsuario> buscarPorId(Long id) {
@@ -45,7 +45,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioCadastro.nome());
         usuario.setEmail(usuarioCadastro.email());
-        usuario.setSenhaHash(passwordEncoder.encode(usuarioCadastro.senha()));
+        usuario.setSenha(passwordEncoder.encode(usuarioCadastro.senha()));
         usuario.setPapel(Papel.CLIENTE);
         usuario.setProvider(Provider.LOCAL);
 

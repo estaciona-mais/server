@@ -1,0 +1,117 @@
+package com.estacionamais.server.model.entities;
+
+import com.estacionamais.server.model.enums.*;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "assinatura")
+public class Assinatura {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "plano_id", nullable = false)
+    private Plano plano;
+
+    @Column(nullable = false)
+    private OffsetDateTime emissao;
+
+    @Column(nullable = false)
+    private OffsetDateTime validade; // = calcularValidadeAssinatura();
+
+    @Column
+    private OffsetDateTime atualizadaEm;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private StatusContrato status;
+
+    @Column(nullable = false, unique = true, length = 60)
+    private String stripeSubscriptionId;
+
+    public Assinatura() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Plano getPlano() {
+        return plano;
+    }
+
+    public void setPlano(Plano plano) {
+        this.plano = plano;
+    }
+
+    public OffsetDateTime getEmissao() {
+        return emissao;
+    }
+
+    public void setEmissao(OffsetDateTime emissao) {
+        this.emissao = emissao;
+    }
+
+    public OffsetDateTime getValidade() {
+        return validade;
+    }
+
+    public void setValidade(OffsetDateTime validade) {
+        this.validade = validade;
+    }
+
+    public OffsetDateTime getAtualizadaEm() {
+        return atualizadaEm;
+    }
+
+    public void setAtualizadaEm(OffsetDateTime atualizadaEm) {
+        this.atualizadaEm = atualizadaEm;
+    }
+
+    public StatusContrato getStatusContrato() {
+        return status;
+    }
+
+    public void setStatusContrato(StatusContrato statusContrato) {
+        this.status = statusContrato;
+    }
+
+    public String getStripeSubscriptionId() {
+        return stripeSubscriptionId;
+    }
+
+    public void setStripeSubscriptionId(String stripeCustomerId) {
+        this.stripeSubscriptionId = stripeCustomerId;
+    }
+
+    private OffsetDateTime calcularValidadeAssinatura() {
+        byte acrescimo = switch (this.plano.getTitulo()) {
+            case MENSAL -> 1;
+            case BIMESTRAL -> 2;
+            case TRIMESTRAL -> 3;
+            case SEMESTRAL -> 6;
+            case ANUAL -> 12;
+        };
+        return this.emissao.plusMonths(acrescimo);
+    }
+
+    // public String[] getHistoricoAcesso() {}
+}

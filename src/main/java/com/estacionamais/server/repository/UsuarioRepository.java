@@ -1,9 +1,9 @@
 package com.estacionamais.server.repository;
 
-import java.security.Provider;
 import java.util.Optional;
 
 import com.estacionamais.server.model.entities.Usuario;
+import com.estacionamais.server.model.enums.Provider;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {

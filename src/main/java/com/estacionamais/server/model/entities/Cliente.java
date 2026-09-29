@@ -1,8 +1,10 @@
 package com.estacionamais.server.model.entities;
 
-import com.estacionamais.server.model.enums.*;
+import com.estacionamais.server.model.enums.MetodoPagamento;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "cliente")
@@ -15,64 +17,89 @@ public class Cliente {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "plano_id", nullable = false)
-    private Plano plano;
-
-    @Column(nullable = false, length = 60)
-    private String stripeCustomerId;
-
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 14)
     private String cpf;
 
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
+    @Column(nullable = false, unique = true, length = 60)
+    private String stripeCustomerId;
+
+    @Column(nullable = false)
+    private OffsetDateTime criadoEm;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private StatusContrato statusContrato;
+    private MetodoPagamento metodoPagamento;
 
-    public Cliente() {}
+    @Column(columnDefinition = "TEXT[]")
+    private List<String> avisos;
+
+    public Cliente() {
+    }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Usuario getUsuario() {
-        return this.usuario;
+        return usuario;
     }
 
-    public String getNome() {
-        return this.usuario.getNome();
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getEmail() {
-        return this.usuario.getEmail();
+    public String getCpf() {
+        return cpf;
     }
 
-    public Plano getPlano() {
-        return this.plano;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
-
-    // public String getStripeCustomerId() {
-    //     return this.stripeCustomerId;
-    // }
-
-    // public String getCpf() {
-    //     return this.cpf;
-    // }
 
     public LocalDate getDataNascimento() {
-        return this.dataNascimento;
+        return dataNascimento;
     }
 
-    public StatusContrato getStatusContrato() {
-        return this.statusContrato;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
-    public void atualizarStatusContrato(StatusContrato novoStatus) {
-        this.statusContrato = novoStatus;
+    public String getStripeCustomerId() {
+        return stripeCustomerId;
     }
 
-    // public String[] getHistoricoAcesso() {}
+    public void setStripeCustomerId(String stripeCustomerId) {
+        this.stripeCustomerId = stripeCustomerId;
+    }
+
+    public OffsetDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(OffsetDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
+    public MetodoPagamento getMetodoPagamento() {
+        return metodoPagamento;
+    }
+
+    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
+    }
+
+    public List<String> getAvisos() {
+        return avisos;
+    }
+
+    public void setAvisos(List<String> avisos) {
+        this.avisos = avisos;
+    }
 }

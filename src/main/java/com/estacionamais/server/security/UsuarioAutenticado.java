@@ -21,13 +21,18 @@ public class UsuarioAutenticado implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return usuario.getSenhaHash();
+    public String getUsername() {
+        return this.usuario.getEmail();
     }
 
     @Override
-    public String getUsername() {
-        return this.usuario.getEmail();
+    public String getPassword() {
+        return usuario.getSenha();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override

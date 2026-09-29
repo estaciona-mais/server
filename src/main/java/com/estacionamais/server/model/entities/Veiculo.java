@@ -30,8 +30,7 @@ public class Veiculo {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @JdbcType(CharJdbcType.class)
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String placa;
 
     @Column(nullable = false)
@@ -45,14 +44,14 @@ public class Veiculo {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private CorVeiculo cor;
-
-    @Column
-    private String observacao;
+    private TipoVeiculo tipo;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private TipoVeiculo tipo;
+    private CorVeiculo cor;
+
+    @Column(columnDefinition = "TEXT")
+    private String observacao;
 
     protected static int contagemVeiculos;
 
@@ -60,43 +59,75 @@ public class Veiculo {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Cliente getCliente() {
-        return this.cliente;
+        return cliente;
     }
 
-    public String getNomeCliente() {
-        return this.getCliente().getNome();
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getPlaca() {
-        return this.placa;
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public String getFabricante() {
-        return this.fabricante;
+        return fabricante;
+    }
+
+    public void setFabricante(String fabricante) {
+        this.fabricante = fabricante;
     }
 
     public String getModelo() {
-        return this.modelo;
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
     }
 
     public Integer getAno() {
-        return this.ano;
+        return ano;
     }
 
-    public CorVeiculo getCor() {
-        return this.cor;
+    public void setAno(Integer ano) {
+        this.ano = ano;
     }
 
     public TipoVeiculo getTipo() {
-        return this.tipo;
+        return tipo;
+    }
+
+    public void setTipo(TipoVeiculo tipo) {
+        this.tipo = tipo;
+    }
+
+    public CorVeiculo getCor() {
+        return cor;
+    }
+
+    public void setCor(CorVeiculo cor) {
+        this.cor = cor;
     }
 
     public String getObservacao() {
-        return this.observacao;
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     static void conferirCampos(String placa, String modelo, CorVeiculo cor, TipoVeiculo tipo)

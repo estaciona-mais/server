@@ -16,11 +16,11 @@ public class Endereco {
     private Cliente cliente;
 
     @JdbcType(CharJdbcType.class)
-    @Column(nullable = false, length = 2)
+    @Column(nullable = false, length = 2, columnDefinition = "TEXT")
     private String uf;
 
     @JdbcType(CharJdbcType.class)
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false, length = 9, columnDefinition = "TEXT")
     private String cep;
 
     @Column(nullable = false, length = 96)
@@ -46,10 +46,6 @@ public class Endereco {
 
     public Cliente getCliente() {
         return this.cliente;
-    }
-
-    public String getNomeCliente() {
-        return this.getCliente().getNome();
     }
 
     public String getUf() {

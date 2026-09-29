@@ -21,7 +21,7 @@ public class VeiculoService {
     private ResumoVeiculo paraDto(Veiculo veiculo) {
         return new ResumoVeiculo(
                 veiculo.getId(),
-                veiculo.getNomeCliente(),
+                veiculo.getCliente().getUsuario().getNome(),
                 veiculo.getPlaca(),
                 veiculo.getFabricante(),
                 veiculo.getModelo(),

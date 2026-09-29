@@ -21,7 +21,7 @@ public class EnderecoService {
     private ResumoEndereco paraDto(Endereco endereco) {
         return new ResumoEndereco(
                 endereco.getId(),
-                endereco.getNomeCliente(),
+                endereco.getCliente().getUsuario().getNome(),
                 endereco.getUf(),
                 endereco.getCep(),
                 endereco.getCidade(),

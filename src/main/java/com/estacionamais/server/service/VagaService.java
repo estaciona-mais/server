@@ -24,12 +24,9 @@ public class VagaService {
     private ResumoVaga paraDto(Vaga veiculo) {
         return new ResumoVaga(
                 veiculo.getId(),
-                veiculo.getCliente().getNome(),
-                veiculo.getPlaca(),
                 veiculo.getNumero(),
-                veiculo.getTipo(),
-                veiculo.getDataEntrada(),
-                veiculo.getDataSaida());
+                veiculo.getZona(),
+                veiculo.getDisponivel());
     }
 
     public Optional<ResumoVaga> buscarPorNumero(Integer numero) {

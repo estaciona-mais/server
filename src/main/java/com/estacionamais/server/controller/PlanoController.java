@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/planos")
 public class PlanoController {
-    private final PlanoService planoService;
+    private final PlanoService clienteService;
 
-    public PlanoController(PlanoService planoService) {
-        this.planoService = planoService;
+    public PlanoController(PlanoService clienteService) {
+        this.clienteService = clienteService;
     }
 
     @GetMapping
     public List<ResumoPlano> listar() {
-        return planoService.listarTodos();
+        return clienteService.listarTodos();
     }
 
     @GetMapping("/{titulo}")
     public ResumoPlano buscarPlanoPorTitulo(@PathVariable String titulo) {
-        return planoService.buscarPorTitulo(titulo).orElse(null);
+        return clienteService.buscarPorTitulo(titulo).orElse(null);
     }
 }
