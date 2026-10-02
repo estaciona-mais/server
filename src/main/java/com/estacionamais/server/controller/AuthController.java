@@ -6,6 +6,7 @@ import com.estacionamais.server.security.JwtService;
 import com.estacionamais.server.security.UsuarioAutenticado;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,8 @@ public class AuthController {
                     token,
                     usuarioAutenticado.getUsuario().getNome(),
                     usuarioAutenticado.getUsuario().getPapel().name());
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Credenciais invalidas.");
         } catch (Exception e) {
             throw new RuntimeException("Erro ao autenticar usuário.");
         }
