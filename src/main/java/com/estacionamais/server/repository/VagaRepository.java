@@ -5,4 +5,5 @@ import com.estacionamais.server.model.entities.Vaga;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VagaRepository extends JpaRepository<Vaga, Long> {
+    public Vaga findByZonaAndNumero(String zona, Integer numero);
 }

@@ -12,7 +12,6 @@ import com.estacionamais.server.model.entities.Vaga;
 import com.estacionamais.server.model.enums.TipoVeiculo;
 import com.estacionamais.server.repository.MovimentacaoRepository;
 import com.estacionamais.server.repository.VagaRepository;
-import com.estacionamais.server.repository.VeiculoRepository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

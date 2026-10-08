@@ -1,5 +1,7 @@
 package com.estacionamais.server.model.entities;
 
+import com.estacionamais.server.model.enums.TipoVeiculo;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -15,11 +17,12 @@ public class Vaga {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String zona;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private TipoVeiculo tipo;
+
     @Column(nullable = false)
     private Boolean disponivel;
-
-    // private static int vagasDisponiveis;
-    // private static int vagasOcupadas = 0;
 
     public Vaga() {
     }
@@ -48,12 +51,24 @@ public class Vaga {
         this.zona = zona;
     }
 
+    public TipoVeiculo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVeiculo tipo) {
+        this.tipo = tipo;
+    }
+
     public Boolean getDisponivel() {
         return disponivel;
     }
 
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
+    }
+
+    public String getCodigo() {
+        return String.format("%s%s", this.zona, this.numero);
     }
 
     // public String conferirStatus() {
