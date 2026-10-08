@@ -2,8 +2,8 @@ package com.estacionamais.server.dto;
 
 import com.estacionamais.server.model.enums.*;
 
-public record ResumoVeiculo(
-        Long id,
+public record VeiculoResponse(
+        Long clienteId,
         String nomeCliente,
         String placa,
         String fabricante,
