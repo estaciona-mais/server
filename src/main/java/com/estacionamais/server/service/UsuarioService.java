@@ -51,4 +51,18 @@ public class UsuarioService {
 
         usuarioRepository.save(usuario);
     }
+
+    // TODO: atualizar os valores no banco
+    // public void atualizarNome(String novoNome) throws IllegalArgumentException {
+    //     Utils.atualizarDado(novoNome, "Um nome", () -> this.nome = novoNome);
+    // }
+
+    // public void atualizarEmail(String novoEmail) throws IllegalArgumentException {
+    //     Utils.atualizarDado(novoEmail, "Um e-mail", () -> this.email = novoEmail);
+    // }
+
+    // public void atualizarSenha(String novaSenha) throws IllegalArgumentException {
+    //     String hashedSenha = this.passwordEncoder.encode(novaSenha);
+    //     Utils.atualizarDado(novaSenha, "Uma senha", () -> this.senha = hashedSenha);
+    // }
 }
