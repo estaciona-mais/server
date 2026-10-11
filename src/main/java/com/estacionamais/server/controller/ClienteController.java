@@ -2,6 +2,7 @@ package com.estacionamais.server.controller;
 
 import com.estacionamais.server.dto.ClienteRequest;
 import com.estacionamais.server.dto.ClienteResponse;
+import com.estacionamais.server.dto.ConsultaClienteRequest;
 import com.estacionamais.server.dto.DadosCliente;
 import com.estacionamais.server.service.ClienteService;
 import java.util.List;
@@ -25,9 +26,14 @@ public class ClienteController {
         return clienteService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public DadosCliente buscarClientePorTitulo(@PathVariable Long id) {
-        return clienteService.buscarPorId(id).orElse(null);
+    // @GetMapping("/{id}")
+    // public DadosCliente buscarClientePorTitulo(@PathVariable Long id) {
+    //     return clienteService.buscarPorId(id).orElse(null);
+    // }
+
+    @PostMapping("/consulta")
+    public DadosCliente consultarCliente(@RequestBody ConsultaClienteRequest req) {
+        return clienteService.buscarCliente(req).orElse(null);
     }
 
     @PostMapping("/cadastrar")
