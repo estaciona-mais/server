@@ -1,10 +1,8 @@
 package com.estacionamais.server.model.entities;
 
-import com.estacionamais.server.core.Utils;
 import com.estacionamais.server.model.enums.*;
+
 import jakarta.persistence.*;
-import java.security.NoSuchAlgorithmException;
-import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "usuario")
@@ -90,19 +88,5 @@ public class Usuario {
 
     public void setPapel(Papel papel) {
         this.papel = papel;
-    }
-
-    // TODO: atualizar os valores no banco
-    public void atualizarNome(String novoNome) throws IllegalArgumentException {
-        Utils.atualizarDado(novoNome, "Um nome", () -> this.nome = novoNome);
-    }
-
-    public void atualizarEmail(String novoEmail) throws IllegalArgumentException {
-        Utils.atualizarDado(novoEmail, "Um e-mail", () -> this.email = novoEmail);
-    }
-
-    public void atualizarSenha(String novaSenha) throws IllegalArgumentException, NoSuchAlgorithmException {
-        String hashedSenha = Utils.hashSenha(novaSenha);
-        Utils.atualizarDado(novaSenha, "Uma senha", () -> this.senha = hashedSenha);
     }
 }

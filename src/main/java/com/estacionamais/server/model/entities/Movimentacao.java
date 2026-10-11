@@ -22,7 +22,7 @@ public class Movimentacao {
     @Column(nullable = false)
     private OffsetDateTime dataEntrada;
 
-    @Column(nullable = false)
+    @Column
     private OffsetDateTime dataSaida;
 
     public Movimentacao() {
@@ -58,5 +58,13 @@ public class Movimentacao {
 
     public void setDataEntrada(OffsetDateTime dataEntrada) {
         this.dataEntrada = dataEntrada;
+    }
+
+    public OffsetDateTime getDataSaida() {
+        return dataSaida;
+    }
+
+    public void setDataSaida(OffsetDateTime dataSaida) {
+        this.dataSaida = dataSaida;
     }
 }
