@@ -22,16 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class ConfiguracaoSeguranca {
     @Bean
-    public CorsConfigurationSource configuracaoCors() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -43,26 +35,54 @@ public class ConfiguracaoSeguranca {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
             JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(regras -> regras
-                        .requestMatchers("/api/auth/**")
+                        // .requestMatchers()
+                        // .permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/clientes/**",
+                                "/api/planos/**",
+                                "/api/veiculos/**",
+                                "/api/movimentacao/**",
+                                "/api/vagas/**")
                         .permitAll()
-                        .requestMatchers("/api/usuarios")
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/clientes/**",
+                                "/api/auth/**",
+                                "/api/veiculos/**",
+                                "/api/movimentacao/**",
+                                "/api/clientes/cadastro")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/vagas")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/veiculos/**")
-                        .hasAllRoles("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+                        .requestMatchers(
+                                "/api/clientes/**",
+                                "/api/enderecos/**",
+                                "/api/movimentacoes/**",
+                                "/api/veiculos/**",
+                                "/api/vagas/**",
+                                "/api/movimentacoes/**",
+                                "/api/usuarios/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH)
+                        .hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+    public CorsConfigurationSource configuracaoCors() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
