@@ -1,8 +1,5 @@
 package com.estacionamais.server.service;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-
 import com.estacionamais.server.dto.MovimentacaoClienteRequest;
 import com.estacionamais.server.dto.MovimentacaoResponse;
 import com.estacionamais.server.dto.RegistroMovimentacaoRequest;
@@ -12,7 +9,8 @@ import com.estacionamais.server.model.entities.Veiculo;
 import com.estacionamais.server.repository.MovimentacaoRepository;
 import com.estacionamais.server.repository.VagaRepository;
 import com.estacionamais.server.repository.VeiculoRepository;
-
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,8 @@ public class MovimentacaoService {
 
     public List<MovimentacaoResponse> listarTodas() {
         return this.movimentacaoRepository.findAll(Sort.by(Sort.Direction.DESC, "dataEntrada")).stream()
-                .map(this::paraDto).toList();
+                .map(this::paraDto)
+                .toList();
     }
 
     public MovimentacaoResponse paraDto(Movimentacao movimentacao) {
@@ -50,9 +49,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoResponse> listarHistoricoCliente(MovimentacaoClienteRequest req) {
-        return this.movimentacaoRepository
-                .findAll(Sort.by(Sort.Direction.DESC, "dataEntrada"))
-                .stream()
+        return this.movimentacaoRepository.findAll(Sort.by(Sort.Direction.DESC, "dataEntrada")).stream()
                 .filter(m -> m.getVeiculo().getCliente().getId().equals(req.id()))
                 .map(this::paraDto)
                 .toList();

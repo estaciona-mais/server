@@ -29,8 +29,7 @@ public class UsuarioService {
     }
 
     private FichaUsuario paraDto(Usuario usuario) {
-        return new FichaUsuario(
-                usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), usuario.getPapel());
+        return new FichaUsuario(usuario.getId(), usuario.getNome(), usuario.getEmail());
     }
 
     public Optional<FichaUsuario> buscarPorId(Long id) {

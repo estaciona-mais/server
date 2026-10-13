@@ -1,9 +1,7 @@
 package com.estacionamais.server.core;
 
-import java.util.List;
-
 import com.estacionamais.server.security.JwtAuthenticationFilter;
-
+import java.util.List;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,29 +31,30 @@ public class ConfiguracaoSeguranca {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
-            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurity, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(regras -> regras
-                        // .requestMatchers()
-                        // .permitAll()
+                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/webhook/**")
+                        .permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/clientes/**",
-                                "/api/planos/**",
-                                "/api/veiculos/**",
-                                "/api/movimentacao/**",
+                                "/api/planos",
+                                // "/api/veiculos/**",
+                                // "/api/movimentacao/**",
                                 "/api/vagas/**")
                         .permitAll()
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/clientes/**",
+                                "/api/planos/**",
                                 "/api/auth/**",
                                 "/api/veiculos/**",
                                 "/api/movimentacao/**",
+                                // "/api/financeiro/**",
                                 "/api/clientes/cadastro")
                         .permitAll()
                         .requestMatchers(
@@ -65,11 +64,13 @@ public class ConfiguracaoSeguranca {
                                 "/api/veiculos/**",
                                 "/api/vagas/**",
                                 "/api/movimentacoes/**",
+                                "/api/financeiro/**",
                                 "/api/usuarios/**")
                         .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH)
+                        .requestMatchers(HttpMethod.PATCH, "/api/planos/**")
                         .hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest()
+                        .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
