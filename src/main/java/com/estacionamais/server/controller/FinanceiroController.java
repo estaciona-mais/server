@@ -1,9 +1,7 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.RelatorioFinanceiroResponse;
-import com.estacionamais.server.dto.RelatorioFinanceiroRequest;
+import com.estacionamais.server.dto.financeiro.*;
 import com.estacionamais.server.service.FinanceiroService;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController

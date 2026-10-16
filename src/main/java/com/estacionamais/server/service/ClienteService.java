@@ -1,19 +1,14 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.ClienteRequest;
-import com.estacionamais.server.dto.ClienteResponse;
-import com.estacionamais.server.dto.ConsultaClienteRequest;
-import com.estacionamais.server.dto.DadosCliente;
+import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.entities.Veiculo;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.repository.VeiculoRepository;
-
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +17,9 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     private VeiculoRepository veiculoRepository;
 
-    public ClienteService(UsuarioRepository usuarioRepository, ClienteRepository clienteRepository,
+    public ClienteService(
+            UsuarioRepository usuarioRepository,
+            ClienteRepository clienteRepository,
             VeiculoRepository veiculoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.clienteRepository = clienteRepository;
@@ -30,10 +27,7 @@ public class ClienteService {
     }
 
     public List<DadosCliente> listarTodos() {
-        return this.listarClientes()
-                .stream()
-                .map(this::paraDto)
-                .toList();
+        return this.listarClientes().stream().map(this::paraDto).toList();
     }
 
     public List<Cliente> listarClientes() {
@@ -66,12 +60,15 @@ public class ClienteService {
             throw new RuntimeException("Nome, CPF ou placa deve ser informado.");
         }
 
-        return Optional.of(
-                new DadosCliente(cliente.getId(), cliente.getUsuario().getNome(), cliente.getUsuario().getEmail()));
+        return Optional.of(new DadosCliente(
+                cliente.getId(),
+                cliente.getUsuario().getNome(),
+                cliente.getUsuario().getEmail()));
     }
 
     public ClienteResponse cadastrar(ClienteRequest req) {
-        Usuario usuario = usuarioRepository.findById(req.usuarioId())
+        Usuario usuario = usuarioRepository
+                .findById(req.usuarioId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
         Cliente cliente = new Cliente();
@@ -82,10 +79,6 @@ public class ClienteService {
         cliente.setUsuario(usuario);
 
         Cliente salvo = clienteRepository.save(cliente);
-        return new ClienteResponse(
-                salvo.getId(),
-                salvo.getUsuario().getNome(),
-                salvo.getCriadoEm(),
-                salvo.getAvisos());
+        return new ClienteResponse(salvo.getId(), salvo.getUsuario().getNome(), salvo.getCriadoEm(), salvo.getAvisos());
     }
 }

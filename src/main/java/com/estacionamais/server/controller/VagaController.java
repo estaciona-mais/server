@@ -1,12 +1,9 @@
 package com.estacionamais.server.controller;
 
-import java.util.List;
-
-import com.estacionamais.server.dto.OcupacaoVagas;
-import com.estacionamais.server.dto.ResumoVaga;
-import com.estacionamais.server.dto.VeiculoResponse;
+import com.estacionamais.server.dto.vaga.*;
+import com.estacionamais.server.dto.veiculo.*;
 import com.estacionamais.server.service.VagaService;
-
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

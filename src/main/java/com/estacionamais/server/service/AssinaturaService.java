@@ -1,10 +1,9 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.ResumoAssinatura;
+import com.estacionamais.server.dto.assinatura.*;
 import com.estacionamais.server.model.entities.Assinatura;
 import com.estacionamais.server.repository.AssinaturaRepository;
 import java.util.List;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,7 @@ public class AssinaturaService {
     }
 
     public List<ResumoAssinatura> listarTodas() {
-        return this.assinaturaRepository
-                .findAll(Sort.by(Sort.Direction.DESC, "emissao"))
-                .stream()
+        return this.assinaturaRepository.findAll(Sort.by(Sort.Direction.DESC, "emissao")).stream()
                 .map(this::paraDto)
                 .toList();
     }

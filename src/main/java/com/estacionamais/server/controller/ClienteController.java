@@ -1,16 +1,11 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.ClienteRequest;
-import com.estacionamais.server.dto.ClienteResponse;
-import com.estacionamais.server.dto.ConsultaClienteRequest;
-import com.estacionamais.server.dto.DadosCliente;
+import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.service.ClienteService;
+import jakarta.validation.Valid;
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/clientes")

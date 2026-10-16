@@ -1,7 +1,6 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.AtualizacaoPlanoRequest;
-import com.estacionamais.server.dto.ResumoPlano;
+import com.estacionamais.server.dto.plano.*;
 import com.estacionamais.server.model.entities.Plano;
 import com.estacionamais.server.repository.PlanoRepository;
 import java.util.*;

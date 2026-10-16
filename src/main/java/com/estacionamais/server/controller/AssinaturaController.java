@@ -1,6 +1,6 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.ResumoAssinatura;
+import com.estacionamais.server.dto.assinatura.*;
 import com.estacionamais.server.service.AssinaturaService;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;

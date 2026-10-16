@@ -1,6 +1,6 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.ResumoEndereco;
+import com.estacionamais.server.dto.endereco.*;
 import com.estacionamais.server.model.entities.Endereco;
 import com.estacionamais.server.repository.EnderecoRepository;
 import java.util.*;

@@ -1,12 +1,8 @@
 package com.estacionamais.server.controller;
 
-import java.util.List;
-
-import com.estacionamais.server.dto.MovimentacaoClienteRequest;
-import com.estacionamais.server.dto.MovimentacaoResponse;
-import com.estacionamais.server.dto.RegistroMovimentacaoRequest;
+import com.estacionamais.server.dto.movimentacao.*;
 import com.estacionamais.server.service.MovimentacaoService;
-
+import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

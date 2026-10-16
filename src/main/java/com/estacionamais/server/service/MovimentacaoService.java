@@ -1,8 +1,6 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.MovimentacaoClienteRequest;
-import com.estacionamais.server.dto.MovimentacaoResponse;
-import com.estacionamais.server.dto.RegistroMovimentacaoRequest;
+import com.estacionamais.server.dto.movimentacao.*;
 import com.estacionamais.server.model.entities.Movimentacao;
 import com.estacionamais.server.model.entities.Vaga;
 import com.estacionamais.server.model.entities.Veiculo;

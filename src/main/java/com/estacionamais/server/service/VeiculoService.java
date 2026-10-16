@@ -1,7 +1,6 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.dto.VeiculoRequest;
-import com.estacionamais.server.dto.VeiculoResponse;
+import com.estacionamais.server.dto.veiculo.*;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Veiculo;
 import com.estacionamais.server.model.enums.CorVeiculo;
@@ -45,13 +44,13 @@ public class VeiculoService {
     }
 
     public Optional<VeiculoResponse> buscarPorId(Long id) {
-        return listarTodos().stream()
-                .filter(v -> v.clienteId() == id).findFirst();
+        return listarTodos().stream().filter(v -> v.clienteId() == id).findFirst();
     }
 
     public List<VeiculoResponse> buscarPorNomeCliente(String nomeCliente) {
         return listarTodos().stream()
-                .filter(v -> v.nomeCliente().toLowerCase().equals(nomeCliente)).toList();
+                .filter(v -> v.nomeCliente().toLowerCase().equals(nomeCliente))
+                .toList();
     }
 
     public Optional<VeiculoResponse> buscarPorPlaca(String placa) {
@@ -62,32 +61,32 @@ public class VeiculoService {
 
     public List<VeiculoResponse> buscarPorFabricante(String fabricante) {
         return listarTodos().stream()
-                .filter(v -> v.fabricante().toLowerCase().equals(fabricante)).toList();
+                .filter(v -> v.fabricante().toLowerCase().equals(fabricante))
+                .toList();
     }
 
     public List<VeiculoResponse> buscarPorModelo(String modelo) {
         return listarTodos().stream()
-                .filter(v -> v.modelo().toLowerCase().equals(modelo)).toList();
+                .filter(v -> v.modelo().toLowerCase().equals(modelo))
+                .toList();
     }
 
     public List<VeiculoResponse> buscarPorAno(Integer ano) {
-        return listarTodos().stream()
-                .filter(v -> v.ano() == ano).toList();
+        return listarTodos().stream().filter(v -> v.ano() == ano).toList();
     }
 
     public List<VeiculoResponse> buscarPorCor(CorVeiculo cor) {
-        return listarTodos().stream()
-                .filter(v -> v.cor().equals(cor)).toList();
+        return listarTodos().stream().filter(v -> v.cor().equals(cor)).toList();
     }
 
     public List<VeiculoResponse> buscarPorTipo(TipoVeiculo tipo) {
-        return listarTodos().stream()
-                .filter(v -> v.tipo().equals(tipo)).toList();
+        return listarTodos().stream().filter(v -> v.tipo().equals(tipo)).toList();
     }
 
     public List<VeiculoResponse> buscarPorObservacao(String obs) {
         return listarTodos().stream()
-                .filter(v -> v.observacao().toLowerCase().contains(obs)).toList();
+                .filter(v -> v.observacao().toLowerCase().contains(obs))
+                .toList();
     }
 
     // AVISO: o veículo deve ser armazenado APÓS o cadastro do usuário

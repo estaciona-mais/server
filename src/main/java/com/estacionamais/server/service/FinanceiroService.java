@@ -1,17 +1,13 @@
 package com.estacionamais.server.service;
 
+import com.estacionamais.server.dto.assinatura.*;
+import com.estacionamais.server.dto.financeiro.*;
+import com.estacionamais.server.model.entities.Cliente;
+import com.estacionamais.server.model.enums.StatusAssinatura;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-
-import com.estacionamais.server.dto.RelatorioFinanceiroRequest;
-import com.estacionamais.server.dto.RelatorioFinanceiroResponse;
-import com.estacionamais.server.dto.ResumoAssinatura;
-import com.estacionamais.server.model.entities.Cliente;
-import com.estacionamais.server.model.enums.PeriodoPlano;
-import com.estacionamais.server.model.enums.StatusAssinatura;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,19 +45,17 @@ public class FinanceiroService {
     }
 
     private double calcularFaturamento(List<ResumoAssinatura> assinaturas, OffsetDateTime inicio, OffsetDateTime fim) {
-        return assinaturas
-                .stream()
-                .filter(a -> this.conferirLimiteData(a.emissao(), inicio, fim))
-                .map(a -> a.valor())
-                .reduce(0, Integer::sum) / 100;
+        return assinaturas.stream()
+                        .filter(a -> this.conferirLimiteData(a.emissao(), inicio, fim))
+                        .map(a -> a.valor())
+                        .reduce(0, Integer::sum)
+                / 100;
     }
 
     private List<Cliente> filtrarClientes(OffsetDateTime inicio, OffsetDateTime fim) {
-        return this.assinaturaService
-                .listarAssinaturas()
-                .stream()
-                .filter(a -> a.getStatus().equals(StatusAssinatura.ATIVA)
-                        && conferirLimiteData(a.getEmissao(), inicio, fim))
+        return this.assinaturaService.listarAssinaturas().stream()
+                .filter(a ->
+                        a.getStatus().equals(StatusAssinatura.ATIVA) && conferirLimiteData(a.getEmissao(), inicio, fim))
                 .map(a -> a.getCliente())
                 .toList();
     }

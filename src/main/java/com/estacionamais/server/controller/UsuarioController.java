@@ -1,13 +1,11 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.UsuarioCadastro;
+import com.estacionamais.server.dto.usuario.*;
 import com.estacionamais.server.service.UsuarioService;
-
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")

@@ -1,11 +1,8 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.AtualizacaoPlanoRequest;
-import com.estacionamais.server.dto.PlanoRequest;
-import com.estacionamais.server.dto.ResumoPlano;
+import com.estacionamais.server.dto.plano.*;
 import com.estacionamais.server.service.PlanoService;
 import java.util.List;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

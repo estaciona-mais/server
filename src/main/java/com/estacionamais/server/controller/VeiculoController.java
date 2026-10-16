@@ -1,7 +1,6 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.VeiculoRequest;
-import com.estacionamais.server.dto.VeiculoResponse;
+import com.estacionamais.server.dto.veiculo.*;
 // import com.estacionamais.server.dto.VeiculoSearchRequest;
 // import com.estacionamais.server.model.enums.*;
 import com.estacionamais.server.service.VeiculoService;

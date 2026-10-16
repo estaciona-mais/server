@@ -1,8 +1,7 @@
 package com.estacionamais.server.controller;
 
-import com.estacionamais.server.dto.GoogleLoginRequest;
-import com.estacionamais.server.dto.LoginRequest;
-import com.estacionamais.server.dto.LoginResponse;
+import com.estacionamais.server.dto.google.*;
+import com.estacionamais.server.dto.usuario.*;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
