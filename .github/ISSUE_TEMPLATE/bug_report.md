@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Aponte um erro no projeto
-title: ''
+title: '[fix]'
 labels: bug
 assignees: ''
 type: Bug
