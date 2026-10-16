@@ -17,6 +17,6 @@ public class AssinaturaController {
 
     @GetMapping
     public List<ResumoAssinatura> listar() {
-        return this.assinaturaService.listarTodos();
+        return this.assinaturaService.listarTodas();
     }
 }

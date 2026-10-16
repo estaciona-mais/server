@@ -1,5 +1,6 @@
 package com.estacionamais.server.service;
 
+import com.estacionamais.server.dto.AtualizacaoPlanoRequest;
 import com.estacionamais.server.dto.ResumoPlano;
 import com.estacionamais.server.model.entities.Plano;
 import com.estacionamais.server.repository.PlanoRepository;
@@ -27,5 +28,11 @@ public class PlanoService {
         return listarTodos().stream()
                 .filter(plano -> plano.titulo().toLowerCase().equals(titulo.toLowerCase()))
                 .findFirst();
+    }
+
+    public void atualizarValorPlano(AtualizacaoPlanoRequest req) {
+        Plano plano = this.planoRepository.findByTitulo(req.titulo()).orElseThrow();
+        plano.setValor(req.novoValor());
+        this.planoRepository.save(plano);
     }
 }

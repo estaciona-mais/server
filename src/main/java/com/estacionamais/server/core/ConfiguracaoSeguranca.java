@@ -1,9 +1,7 @@
 package com.estacionamais.server.core;
 
-import java.util.List;
-
 import com.estacionamais.server.security.JwtAuthenticationFilter;
-
+import java.util.List;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,16 +20,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class ConfiguracaoSeguranca {
     @Bean
-    public CorsConfigurationSource configuracaoCors() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -41,28 +31,59 @@ public class ConfiguracaoSeguranca {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
-            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurity, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(regras -> regras
-                        .requestMatchers("/api/auth/**")
+                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/webhook/**")
                         .permitAll()
-                        .requestMatchers("/api/usuarios")
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/clientes/**",
+                                "/api/planos",
+                                // "/api/veiculos/**",
+                                // "/api/movimentacao/**",
+                                "/api/vagas/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/vagas")
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/clientes/**",
+                                "/api/planos/**",
+                                "/api/auth/**",
+                                "/api/veiculos/**",
+                                "/api/movimentacao/**",
+                                // "/api/financeiro/**",
+                                "/api/clientes/cadastro")
                         .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/veiculos/**")
-                        .hasAllRoles("ADMIN")
+                        .requestMatchers(
+                                "/api/clientes/**",
+                                "/api/enderecos/**",
+                                "/api/movimentacoes/**",
+                                "/api/veiculos/**",
+                                "/api/vagas/**",
+                                "/api/movimentacoes/**",
+                                "/api/financeiro/**",
+                                "/api/usuarios/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/planos/**")
+                        .hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+    public CorsConfigurationSource configuracaoCors() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

@@ -17,17 +17,40 @@ public class Plano {
     @Column(nullable = false, length = 10)
     private PeriodoPlano titulo;
 
+    @Column(nullable = false, unique = true, length = 60)
+    private String stripePriceId;
+
     public Plano() {}
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    public int getValor() {
-        return this.valor;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getValor() {
+        return valor;
+    }
+
+    public void setValor(Integer valor) {
+        this.valor = valor;
     }
 
     public PeriodoPlano getTitulo() {
-        return this.titulo;
+        return titulo;
+    }
+
+    public void setTitulo(PeriodoPlano titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getStripePriceId() {
+        return stripePriceId;
+    }
+
+    public void setStripePriceId(String stripePriceId) {
+        this.stripePriceId = stripePriceId;
     }
 }

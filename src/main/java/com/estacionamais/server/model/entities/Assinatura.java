@@ -2,7 +2,10 @@ package com.estacionamais.server.model.entities;
 
 import com.estacionamais.server.model.enums.*;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 @Table(name = "assinatura")
@@ -23,20 +26,19 @@ public class Assinatura {
     private OffsetDateTime emissao;
 
     @Column(nullable = false)
-    private OffsetDateTime validade; // = calcularValidadeAssinatura();
+    private LocalDate validade; // = calcularValidadeAssinatura();
 
     @Column
     private OffsetDateTime atualizadaEm;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private StatusContrato status;
+    private StatusAssinatura status;
 
     @Column(nullable = false, unique = true, length = 60)
     private String stripeSubscriptionId;
 
-    public Assinatura() {
-    }
+    public Assinatura() {}
 
     public Long getId() {
         return id;
@@ -70,11 +72,11 @@ public class Assinatura {
         this.emissao = emissao;
     }
 
-    public OffsetDateTime getValidade() {
+    public LocalDate getValidade() {
         return validade;
     }
 
-    public void setValidade(OffsetDateTime validade) {
+    public void setValidade(LocalDate validade) {
         this.validade = validade;
     }
 
@@ -86,12 +88,12 @@ public class Assinatura {
         this.atualizadaEm = atualizadaEm;
     }
 
-    public StatusContrato getStatusContrato() {
+    public StatusAssinatura getStatus() {
         return status;
     }
 
-    public void setStatusContrato(StatusContrato statusContrato) {
-        this.status = statusContrato;
+    public void setStatus(StatusAssinatura status) {
+        this.status = status;
     }
 
     public String getStripeSubscriptionId() {
@@ -102,15 +104,24 @@ public class Assinatura {
         this.stripeSubscriptionId = stripeCustomerId;
     }
 
-    private OffsetDateTime calcularValidadeAssinatura() {
-        byte acrescimo = switch (this.plano.getTitulo()) {
-            case MENSAL -> 1;
-            case BIMESTRAL -> 2;
-            case TRIMESTRAL -> 3;
-            case SEMESTRAL -> 6;
-            case ANUAL -> 12;
-        };
-        return this.emissao.plusMonths(acrescimo);
+    public boolean estaVigente() {
+        boolean statusPermiteAcesso = this.status == StatusAssinatura.ATIVA;
+        boolean periodoValido = this.validade != null
+                && OffsetDateTime.of(this.validade, LocalTime.MIN, ZoneOffset.UTC)
+                        .isAfter(OffsetDateTime.now());
+        return statusPermiteAcesso && periodoValido;
+    }
+
+    private LocalDate calcularValidadeAssinatura() {
+        byte acrescimo =
+                switch (this.plano.getTitulo()) {
+                    case MENSAL -> 1;
+                    case BIMESTRAL -> 2;
+                    case TRIMESTRAL -> 3;
+                    case SEMESTRAL -> 6;
+                    case ANUAL -> 12;
+                };
+        return this.emissao.plusMonths(acrescimo).toLocalDate();
     }
 
     // public String[] getHistoricoAcesso() {}

@@ -7,5 +7,6 @@ import jakarta.validation.constraints.Size;
 public record UsuarioCadastro(
         @NotBlank @Size(max = 120) String nome,
         @NotBlank @Email String email,
-        @NotBlank @Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres.") String senha) {
+        @NotBlank @Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres.")
+        String senha) {
 }
