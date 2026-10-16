@@ -1,7 +1,6 @@
 package com.estacionamais.server.model.entities;
 
 import com.estacionamais.server.model.enums.*;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +16,7 @@ public class Usuario {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String senha;
 
     @Enumerated(value = EnumType.STRING)
@@ -31,8 +30,7 @@ public class Usuario {
     @Column(length = 120)
     private String providerId;
 
-    public Usuario() {
-    }
+    public Usuario() {}
 
     public Long getId() {
         return id;

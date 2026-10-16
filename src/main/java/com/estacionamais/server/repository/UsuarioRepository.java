@@ -1,9 +1,7 @@
 package com.estacionamais.server.repository;
 
-import java.util.Optional;
-
 import com.estacionamais.server.model.entities.Usuario;
-import com.estacionamais.server.model.enums.Provider;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -11,5 +9,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByEmail(String email);
 
-    Optional<Usuario> findByProviderAndProviderId(Provider provider, String providerId);
+    Optional<Usuario> findByProviderId(String providerId);
 }
