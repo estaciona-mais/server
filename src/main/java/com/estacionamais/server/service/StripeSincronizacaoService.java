@@ -14,6 +14,9 @@ import com.stripe.model.StripeObject;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionItem;
 import com.stripe.model.checkout.Session;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -91,6 +94,8 @@ public class StripeSincronizacaoService {
                     });
             assinatura.setPlano(plano);
             assinatura.setStatus(StatusAssinatura.valueOf(atual.getStatus().toUpperCase()));
+            assinatura.setValidade(
+                    LocalDate.ofInstant(Instant.ofEpochSecond(item.getCurrentPeriodEnd()), ZoneOffset.UTC));
 
             this.assinaturaRepository.save(assinatura);
         } catch (StripeException e) {

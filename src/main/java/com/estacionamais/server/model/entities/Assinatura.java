@@ -26,7 +26,7 @@ public class Assinatura {
     private OffsetDateTime emissao;
 
     @Column(nullable = false)
-    private LocalDate validade; // = calcularValidadeAssinatura();
+    private LocalDate validade;
 
     @Column
     private OffsetDateTime atualizadaEm;
@@ -111,18 +111,4 @@ public class Assinatura {
                         .isAfter(OffsetDateTime.now());
         return statusPermiteAcesso && periodoValido;
     }
-
-    private LocalDate calcularValidadeAssinatura() {
-        byte acrescimo =
-                switch (this.plano.getTitulo()) {
-                    case MENSAL -> 1;
-                    case BIMESTRAL -> 2;
-                    case TRIMESTRAL -> 3;
-                    case SEMESTRAL -> 6;
-                    case ANUAL -> 12;
-                };
-        return this.emissao.plusMonths(acrescimo).toLocalDate();
-    }
-
-    // public String[] getHistoricoAcesso() {}
 }
