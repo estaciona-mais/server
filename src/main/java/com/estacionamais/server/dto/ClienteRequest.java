@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.estacionamais.server.model.enums.StatusContrato;
+import com.estacionamais.server.model.enums.StatusAssinatura;
 
 import jakarta.validation.constraints.*;
 
@@ -12,7 +12,7 @@ public record ClienteRequest(
         @NotBlank String stripeCustomerId,
         @NotBlank @Size(min = 14, max = 14) String cpf,
         @NotBlank LocalDate dataNascimento,
-        @NotBlank StatusContrato statusContrato,
+        @NotBlank StatusAssinatura statusContrato,
         @NotBlank OffsetDateTime dataAssinatura,
         @NotBlank OffsetDateTime criadoEm,
         List<String> avisos,

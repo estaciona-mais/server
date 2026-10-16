@@ -4,4 +4,9 @@ import com.estacionamais.server.model.enums.*;
 import java.time.OffsetDateTime;
 
 public record ResumoAssinatura(
-        Long id, String plano, String nomeCliente, OffsetDateTime emissao, MetodoPagamento metodoPagamento) {}
+        Long id,
+        String plano,
+        String nomeCliente,
+        OffsetDateTime emissao,
+        Integer valor,
+        MetodoPagamento metodoPagamento) {}

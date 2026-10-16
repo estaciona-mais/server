@@ -30,9 +30,15 @@ public class ClienteService {
     }
 
     public List<DadosCliente> listarTodos() {
-        return this.clienteRepository.findAll(Sort.by(Sort.Direction.ASC, "id")).stream()
+        return this.listarClientes()
+                .stream()
                 .map(this::paraDto)
                 .toList();
+    }
+
+    public List<Cliente> listarClientes() {
+        List<Cliente> clientes = this.clienteRepository.findAll();
+        return clientes;
     }
 
     private DadosCliente paraDto(Cliente cliente) {
