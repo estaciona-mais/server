@@ -37,7 +37,7 @@ public class ConfiguracaoSeguranca {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/webhook/**")
+                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/usuarios", "/api/auth", "/api/webhook/**")
                         .permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
