@@ -16,4 +16,4 @@ public record VeiculoRequest(
         @Positive Integer ano,
         @NotNull CorVeiculo cor,
         @NotNull TipoVeiculo tipo,
-        String ovservacao) {}
+        String observacao) {}

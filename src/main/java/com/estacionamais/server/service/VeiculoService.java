@@ -101,7 +101,7 @@ public class VeiculoService {
         veiculo.setAno(req.ano());
         veiculo.setTipo(req.tipo());
         veiculo.setCor(req.cor());
-        veiculo.setObservacao(req.ovservacao());
+        veiculo.setObservacao(req.observacao());
 
         Veiculo salvo = this.veiculoRepository.save(veiculo);
         return this.paraDto(salvo);
