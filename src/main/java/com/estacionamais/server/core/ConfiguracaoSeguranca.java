@@ -37,40 +37,40 @@ public class ConfiguracaoSeguranca {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/usuarios", "/api/auth", "/api/webhook/**")
-                        .permitAll()
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/clientes/**",
-                                "/api/planos",
-                                // "/api/veiculos/**",
-                                // "/api/movimentacao/**",
-                                "/api/vagas/**")
-                        .permitAll()
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/clientes/**",
-                                "/api/planos/**",
-                                "/api/auth/**",
-                                "/api/veiculos/**",
-                                "/api/movimentacao/**",
-                                // "/api/financeiro/**",
-                                "/api/clientes/cadastro")
-                        .permitAll()
-                        .requestMatchers(
-                                "/api/clientes/**",
-                                "/api/enderecos/**",
-                                "/api/movimentacoes/**",
-                                "/api/veiculos/**",
-                                "/api/vagas/**",
-                                "/api/movimentacoes/**",
-                                "/api/financeiro/**",
-                                "/api/usuarios/**")
-                        .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/planos/**")
-                        .hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+                .authorizeHttpRequests(
+                        regras -> regras.requestMatchers("/api/usuarios", "/api/auth/**", "/api/webhook/**")
+                                .permitAll()
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/clientes/**",
+                                        "/api/planos",
+                                        // "/api/veiculos/**",
+                                        // "/api/movimentacao/**",
+                                        "/api/vagas/**")
+                                .permitAll()
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/api/clientes/**",
+                                        "/api/planos/**",
+                                        "/api/veiculos/**",
+                                        "/api/movimentacao/**",
+                                        // "/api/financeiro/**",
+                                        "/api/clientes/cadastro")
+                                .permitAll()
+                                .requestMatchers(
+                                        "/api/clientes/**",
+                                        "/api/enderecos/**",
+                                        "/api/movimentacoes/**",
+                                        "/api/veiculos/**",
+                                        "/api/vagas/**",
+                                        "/api/movimentacoes/**",
+                                        "/api/financeiro/**",
+                                        "/api/usuarios/**")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/api/planos/**")
+                                .hasRole("ADMIN")
+                                .anyRequest()
+                                .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
