@@ -16,7 +16,6 @@ public class Usuario {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(length = 255)
     private String senha;
 
     @Enumerated(value = EnumType.STRING)
@@ -25,7 +24,7 @@ public class Usuario {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Provider provider = Provider.LOCAL;
+    private Provider provider;
 
     @Column(length = 120)
     private String providerId;

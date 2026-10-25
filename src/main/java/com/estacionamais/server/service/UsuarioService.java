@@ -35,7 +35,7 @@ public class UsuarioService {
         return listarTodos().stream().filter(usuario -> usuario.id().equals(id)).findFirst();
     }
 
-    public void cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
+    public FichaUsuario cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
         if (usuarioRepository.existsByEmail(usuarioCadastro.email())) {
             throw new IllegalArgumentException("Usuário já cadastrado.");
         }
@@ -43,11 +43,13 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioCadastro.nome());
         usuario.setEmail(usuarioCadastro.email());
-        usuario.setSenha(passwordEncoder.encode(usuarioCadastro.senha()));
+        usuario.setSenha(usuarioCadastro.senha() == null || usuarioCadastro.senha().isBlank() ? null : this.passwordEncoder.encode(usuarioCadastro.senha()));
         usuario.setPapel(Papel.CLIENTE);
-        usuario.setProvider(Provider.LOCAL);
+        usuario.setProvider(usuarioCadastro.provider());
+        usuario.setProviderId(usuarioCadastro.providerId());
 
-        usuarioRepository.save(usuario);
+        Usuario novoUsuario = usuarioRepository.save(usuario);
+        return new FichaUsuario(novoUsuario.getId(), novoUsuario.getNome(), novoUsuario.getEmail());
     }
 
     // TODO: atualizar os valores no banco

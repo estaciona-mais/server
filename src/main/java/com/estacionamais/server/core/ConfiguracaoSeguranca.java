@@ -38,27 +38,19 @@ public class ConfiguracaoSeguranca {
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        regras -> regras.requestMatchers("/api/usuarios", "/api/auth/**", "/api/webhook/**")
+                        regras -> regras.requestMatchers("/api/auth/**", "/api/webhook/**", "/api/veiculos")
                                 .permitAll()
                                 .requestMatchers(
                                         HttpMethod.GET,
-                                        "/api/clientes/**",
                                         "/api/planos",
-                                        // "/api/veiculos/**",
-                                        // "/api/movimentacao/**",
-                                        "/api/vagas/**")
+                                        "/api/veiculos/cores",
+                                        "/api/veiculos/tipos",
+                                        "/api/veiculos")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/clientes", "/api/clientes/google")
                                 .permitAll()
                                 .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/api/clientes/**",
-                                        "/api/planos/**",
-                                        "/api/veiculos/**",
-                                        "/api/movimentacao/**",
-                                        // "/api/financeiro/**",
-                                        "/api/clientes/cadastro")
-                                .permitAll()
-                                .requestMatchers(
-                                        "/api/clientes/**",
+                                        "/api/clientes/consulta",
                                         "/api/enderecos/**",
                                         "/api/movimentacoes/**",
                                         "/api/veiculos/**",
@@ -66,8 +58,6 @@ public class ConfiguracaoSeguranca {
                                         "/api/movimentacoes/**",
                                         "/api/financeiro/**",
                                         "/api/usuarios/**")
-                                .hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PATCH, "/api/planos/**")
                                 .hasRole("ADMIN")
                                 .anyRequest()
                                 .authenticated())

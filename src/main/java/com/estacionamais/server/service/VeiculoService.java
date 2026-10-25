@@ -24,6 +24,14 @@ public class VeiculoService {
         return this.veiculoRepository.findAll().stream().map(this::paraDto).toList();
     }
 
+    public List<CorVeiculo> listarCores() {
+        return List.of(CorVeiculo.values());
+    }
+
+    public List<TipoVeiculo> listarTipos() {
+        return List.of(TipoVeiculo.values());
+    }
+
     public VeiculoResponse paraDto(Veiculo veiculo) {
         return new VeiculoResponse(
                 veiculo.getId(),

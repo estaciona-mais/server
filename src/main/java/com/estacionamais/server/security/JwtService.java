@@ -1,17 +1,14 @@
 package com.estacionamais.server.security;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.function.Function;
-
-import javax.crypto.SecretKey;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.function.Function;
+import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtService {
@@ -31,7 +28,7 @@ public class JwtService {
         Date expiraEm = new Date(agora.getTime() + this.jwtExpiracaoMinutos * 60 * 1000);
 
         return Jwts.builder()
-                .subject(usuarioAutenticado.getUsuario().getId().toString())
+                .subject(usuarioAutenticado.getUsuario().getEmail().toString())
                 .claim("nome", usuarioAutenticado.getUsuario().getNome())
                 .claim("papel", usuarioAutenticado.getUsuario().getPapel())
                 .issuedAt(agora)

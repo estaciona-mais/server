@@ -1,12 +1,13 @@
 package com.estacionamais.server.controller;
 
 import com.estacionamais.server.dto.veiculo.*;
+import com.estacionamais.server.model.enums.CorVeiculo;
+import com.estacionamais.server.model.enums.TipoVeiculo;
 // import com.estacionamais.server.dto.VeiculoSearchRequest;
 // import com.estacionamais.server.model.enums.*;
 import com.estacionamais.server.service.VeiculoService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,6 +23,16 @@ public class VeiculoController {
     @GetMapping
     public List<VeiculoResponse> listar() {
         return this.veiculoService.listarTodos();
+    }
+
+    @GetMapping("/cores")
+    public List<CorVeiculo> listarCores() {
+        return this.veiculoService.listarCores();
+    }
+
+    @GetMapping("/tipos")
+    public List<TipoVeiculo> listarTipos() {
+        return this.veiculoService.listarTipos();
     }
 
     // @PostMapping("/busca/id/{id}")
@@ -116,9 +127,8 @@ public class VeiculoController {
     //             tipo, observacao);
     // }
 
-    @PostMapping("/cadastro")
-    public ResponseEntity<VeiculoResponse> cadastrar(@RequestBody @Valid VeiculoRequest veiculoRequest) {
-        VeiculoResponse criado = this.veiculoService.criar(veiculoRequest);
-        return ResponseEntity.ok(criado);
+    @PostMapping
+    public VeiculoResponse cadastrar(@RequestBody @Valid VeiculoRequest veiculoRequest) {
+        return this.veiculoService.criar(veiculoRequest);
     }
 }

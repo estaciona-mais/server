@@ -1,29 +1,43 @@
 package com.estacionamais.server.service;
 
 import com.estacionamais.server.dto.cliente.*;
+import com.estacionamais.server.dto.usuario.FichaUsuario;
+import com.estacionamais.server.dto.usuario.UsuarioCadastro;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.entities.Veiculo;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.repository.VeiculoRepository;
+import com.estacionamais.server.security.DadosGoogle;
+import com.estacionamais.server.security.GoogleTokenService;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
-    private UsuarioRepository usuarioRepository;
-    private ClienteRepository clienteRepository;
-    private VeiculoRepository veiculoRepository;
+    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
+    private final ClienteRepository clienteRepository;
+    private final VeiculoRepository veiculoRepository;
+    private final GoogleTokenService googleTokenService;
+    private final GoogleAuthService googleAuthService;
 
     public ClienteService(
+            UsuarioService usuarioService,
             UsuarioRepository usuarioRepository,
             ClienteRepository clienteRepository,
-            VeiculoRepository veiculoRepository) {
+            VeiculoRepository veiculoRepository,
+            GoogleTokenService googleTokenService,
+            GoogleAuthService googleAuthService) {
+        this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.clienteRepository = clienteRepository;
         this.veiculoRepository = veiculoRepository;
+        this.googleTokenService = googleTokenService;
+        this.googleAuthService = googleAuthService;
     }
 
     public List<DadosCliente> listarTodos() {
@@ -39,7 +53,9 @@ public class ClienteService {
         return new DadosCliente(
                 cliente.getId(),
                 cliente.getUsuario().getNome(),
-                cliente.getUsuario().getEmail());
+                cliente.getUsuario().getEmail(),
+                cliente.getCriadoEm(),
+                cliente.getAviso());
     }
 
     public Optional<DadosCliente> buscarPorId(Long id) {
@@ -49,7 +65,7 @@ public class ClienteService {
     public Optional<DadosCliente> buscarCliente(ConsultaClienteRequest req) {
         Cliente cliente = this.clienteRepository.findByUsuarioNome(req.nome()).orElse(null);
         if (cliente == null) {
-            cliente = this.clienteRepository.findByCpf(req.cpf()).orElse(null);
+            cliente = this.clienteRepository.findById(req.id()).orElse(null);
         }
         if (cliente == null) {
             Veiculo veiculo = this.veiculoRepository.findByPlaca(req.placa()).orElseThrow();
@@ -57,28 +73,46 @@ public class ClienteService {
         }
 
         if (cliente == null) {
-            throw new RuntimeException("Nome, CPF ou placa deve ser informado.");
+            throw new RuntimeException("Nome ou placa deve ser informado.");
         }
 
         return Optional.of(new DadosCliente(
                 cliente.getId(),
                 cliente.getUsuario().getNome(),
-                cliente.getUsuario().getEmail()));
+                cliente.getUsuario().getEmail(),
+                cliente.getCriadoEm(),
+                cliente.getAviso()));
     }
 
-    public ClienteResponse cadastrar(ClienteRequest req) {
-        Usuario usuario = usuarioRepository
-                .findById(req.usuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+    public DadosCliente cadastrar(ClienteRequest req) {
+        FichaUsuario usuarioCadastrado = this.usuarioService.cadastrar(
+                new UsuarioCadastro(req.nome(), req.email(), req.senha(), req.provider(), req.providerId()));
+        Usuario usuario =
+                this.usuarioRepository.findById(usuarioCadastrado.id()).orElseThrow();
 
+        Cliente cliente = criarCliente(usuario);
+        return new DadosCliente(
+                cliente.getId(),
+                cliente.getUsuario().getNome(),
+                cliente.getUsuario().getEmail(),
+                cliente.getCriadoEm(),
+                cliente.getAviso());
+    }
+
+    public DadosCliente cadastrarGoogle(ClienteRequest clienteRequest) {
+        DadosGoogle dados = this.googleTokenService.validar(clienteRequest.credential());
+        Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
+        Cliente cliente = criarCliente(usuario);
+        usuario = cliente.getUsuario();
+        return new DadosCliente(
+                cliente.getId(), usuario.getNome(), usuario.getEmail(), cliente.getCriadoEm(), cliente.getAviso());
+    }
+
+    private Cliente criarCliente(Usuario usuario) {
         Cliente cliente = new Cliente();
-        cliente.setCpf(req.cpf());
-        cliente.setDataNascimento(req.dataNascimento());
-        cliente.setCriadoEm(req.criadoEm());
-        cliente.setAvisos(req.avisos());
         cliente.setUsuario(usuario);
-
-        Cliente salvo = clienteRepository.save(cliente);
-        return new ClienteResponse(salvo.getId(), salvo.getUsuario().getNome(), salvo.getCriadoEm(), salvo.getAvisos());
+        cliente.setCriadoEm(OffsetDateTime.now());
+        cliente.setAviso("");
+        return this.clienteRepository.save(cliente);
     }
 }

@@ -1,3 +1,5 @@
 package com.estacionamais.server.dto.cliente;
 
-public record DadosCliente(Long id, String nome, String email) {}
+import java.time.OffsetDateTime;
+
+public record DadosCliente(Long id, String nome, String email, OffsetDateTime criadoEm, String aviso) {}

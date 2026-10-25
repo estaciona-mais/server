@@ -4,7 +4,6 @@ import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.service.ClienteService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,19 +20,18 @@ public class ClienteController {
         return clienteService.listarTodos();
     }
 
-    // @GetMapping("/{id}")
-    // public DadosCliente buscarClientePorTitulo(@PathVariable Long id) {
-    //     return clienteService.buscarPorId(id).orElse(null);
-    // }
+    @PostMapping
+    public DadosCliente cadastrar(@RequestBody @Valid ClienteRequest cliente) {
+        return this.clienteService.cadastrar(cliente);
+    }
+
+    @PostMapping("/google")
+    public DadosCliente cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) {
+        return this.clienteService.cadastrarGoogle(cliente);
+    }
 
     @PostMapping("/consulta")
     public DadosCliente consultarCliente(@RequestBody ConsultaClienteRequest req) {
-        return clienteService.buscarCliente(req).orElse(null);
-    }
-
-    @PostMapping("/cadastrar")
-    public ResponseEntity<ClienteResponse> cadastrar(@RequestBody @Valid ClienteRequest cliente) {
-        ClienteResponse criado = clienteService.cadastrar(cliente);
-        return ResponseEntity.ok(criado);
+        return this.clienteService.buscarCliente(req).orElse(null);
     }
 }

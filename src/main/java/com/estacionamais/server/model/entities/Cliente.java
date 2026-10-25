@@ -1,10 +1,7 @@
 package com.estacionamais.server.model.entities;
 
-import com.estacionamais.server.model.enums.MetodoPagamento;
 import jakarta.persistence.*;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "cliente")
@@ -17,27 +14,16 @@ public class Cliente {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false, length = 14)
-    private String cpf;
-
-    @Column(nullable = false)
-    private LocalDate dataNascimento;
-
     @Column(nullable = false, unique = true, length = 60)
     private String stripeCustomerId;
 
     @Column(nullable = false)
     private OffsetDateTime criadoEm;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private MetodoPagamento metodoPagamento;
+    @Column(columnDefinition = "TEXT")
+    private String aviso;
 
-    @Column(columnDefinition = "TEXT[]")
-    private List<String> avisos;
-
-    public Cliente() {
-    }
+    public Cliente() {}
 
     public Long getId() {
         return id;
@@ -53,22 +39,6 @@ public class Cliente {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     public String getStripeCustomerId() {
@@ -87,19 +57,11 @@ public class Cliente {
         this.criadoEm = criadoEm;
     }
 
-    public MetodoPagamento getMetodoPagamento() {
-        return metodoPagamento;
+    public String getAviso() {
+        return aviso;
     }
 
-    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
-        this.metodoPagamento = metodoPagamento;
-    }
-
-    public List<String> getAvisos() {
-        return avisos;
-    }
-
-    public void setAvisos(List<String> avisos) {
-        this.avisos = avisos;
+    public void setAviso(String aviso) {
+        this.aviso = aviso;
     }
 }

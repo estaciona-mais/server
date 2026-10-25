@@ -1,12 +1,14 @@
 package com.estacionamais.server.dto.usuario;
 
+import com.estacionamais.server.model.enums.Provider;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
 public record UsuarioCadastro(
-        @NotBlank @Size(max = 120) String nome,
+        @NotBlank String nome,
         @NotBlank @Email String email,
-
-        @NotBlank @Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres.")
-        String senha) {}
+        String senha,
+        @NotNull Provider provider,
+        String providerId) {}
