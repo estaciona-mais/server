@@ -32,7 +32,7 @@ public class AssinaturaService {
                 assinatura.getCliente().getUsuario().getNome(),
                 assinatura.getEmissao(),
                 assinatura.getPlano().getValor(),
-                assinatura.getCliente().getMetodoPagamento());
+                assinatura.getMetodoPagamento());
     }
 
     // TODO: busca por cliente ou intervalo de data|valor

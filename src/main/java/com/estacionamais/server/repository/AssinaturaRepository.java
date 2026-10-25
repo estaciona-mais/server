@@ -2,7 +2,8 @@ package com.estacionamais.server.repository;
 
 import com.estacionamais.server.model.entities.Assinatura;
 import com.estacionamais.server.model.enums.StatusAssinatura;
-import java.time.OffsetDateTime;
+
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,5 @@ public interface AssinaturaRepository extends JpaRepository<Assinatura, Long> {
     List<Assinatura> findByClienteIdOrderByEmissaoDesc(Long clienteId);
 
     boolean existsByClienteIdAndStatusInAndValidadeAfter(
-            Long clienteId, Collection<StatusAssinatura> status, OffsetDateTime agora);
+            Long clienteId, Collection<StatusAssinatura> status, LocalDate agora);
 }

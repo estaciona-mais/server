@@ -3,10 +3,12 @@ package com.estacionamais.server.service;
 import com.estacionamais.server.exception.AssinaturaJaAtivaException;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Plano;
+import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.StatusAssinatura;
 import com.estacionamais.server.repository.AssinaturaRepository;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.PlanoRepository;
+import com.estacionamais.server.repository.UsuarioRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
@@ -20,16 +22,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class CheckoutService {
     private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PlanoRepository planoRepository;
     private final AssinaturaRepository assinaturaRepository;
     private final String frontUrl;
 
     public CheckoutService(
             ClienteRepository clienteRepository,
+            UsuarioRepository usuarioRepository,
             PlanoRepository planoRepository,
             AssinaturaRepository AssinaturaRepository,
             @Value("${app.front-url}") String frontUrl) {
         this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
         this.planoRepository = planoRepository;
         this.assinaturaRepository = AssinaturaRepository;
         this.frontUrl = frontUrl;
@@ -40,7 +45,7 @@ public class CheckoutService {
         Plano plano = this.planoRepository.findById(planoId).orElseThrow();
 
         boolean jaAssina = this.assinaturaRepository.existsByClienteIdAndStatusInAndValidadeAfter(
-                clienteId, List.of(StatusAssinatura.ATIVA), OffsetDateTime.now());
+                clienteId, List.of(StatusAssinatura.ATIVA), OffsetDateTime.now().toLocalDate());
 
         if (jaAssina) {
             throw new AssinaturaJaAtivaException("Você já possui uma assinatura ativa.");
@@ -68,9 +73,10 @@ public class CheckoutService {
         }
     }
 
-    /// Busca um usuário já existente, caso contrário, registra um novo seguindo o princípio da idempotência.
+    /// Busca um usuário já existente; caso contrário, registra um novo seguindo o princípio da idempotência.
     private String obterOuCriarCustomer(Cliente cliente) throws StripeException {
-        if (cliente.getStripeCustomerId() != null) {
+        if (cliente.getStripeCustomerId() != null
+                && !cliente.getStripeCustomerId().isBlank()) {
             return cliente.getStripeCustomerId();
         }
 

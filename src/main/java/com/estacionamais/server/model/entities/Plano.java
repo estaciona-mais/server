@@ -14,7 +14,7 @@ public class Plano {
     private Integer valor;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, unique = true, length = 10)
     private PeriodoPlano titulo;
 
     @Column(nullable = false, unique = true, length = 60)
