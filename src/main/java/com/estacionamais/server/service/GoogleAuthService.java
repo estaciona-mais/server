@@ -22,14 +22,14 @@ public class GoogleAuthService {
         }
 
         return this.usuarioRepository
-                .findByProviderId(dados.id())
+                .findByProviderId(dados.providerId())
                 .or(() -> this.vincularPorEmail(dados))
                 .orElseGet(() -> this.criarConta(dados));
     }
 
     private Optional<Usuario> vincularPorEmail(DadosGoogle dados) {
         return this.usuarioRepository.findByEmail(dados.email()).map(u -> {
-            u.setProviderId(dados.id());
+            u.setProviderId(dados.providerId());
             return u;
         });
     }
@@ -40,7 +40,7 @@ public class GoogleAuthService {
         usuario.setNome(dados.nome());
         usuario.setSenha(null);
         usuario.setProvider(Provider.GOOGLE);
-        usuario.setProviderId(dados.id());
+        usuario.setProviderId(dados.providerId());
         usuario.setPapel(Papel.CLIENTE);
         return this.usuarioRepository.save(usuario);
     }

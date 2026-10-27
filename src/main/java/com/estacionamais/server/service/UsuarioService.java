@@ -49,7 +49,10 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioCadastro.nome());
         usuario.setEmail(usuarioCadastro.email());
-        usuario.setSenha(usuarioCadastro.senha() == null || usuarioCadastro.senha().isBlank() ? null : this.passwordEncoder.encode(usuarioCadastro.senha()));
+        usuario.setSenha(
+                usuarioCadastro.senha() == null || usuarioCadastro.senha().isBlank()
+                        ? null
+                        : this.passwordEncoder.encode(usuarioCadastro.senha()));
         usuario.setPapel(Papel.CLIENTE);
         usuario.setProvider(usuarioCadastro.provider());
         usuario.setProviderId(usuarioCadastro.providerId());

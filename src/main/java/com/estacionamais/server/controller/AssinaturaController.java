@@ -8,8 +8,6 @@ import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.security.UsuarioAutenticado;
 import com.estacionamais.server.service.AssinaturaService;
 import com.estacionamais.server.service.CheckoutService;
-import com.estacionamais.server.service.ClienteService;
-
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +21,8 @@ public class AssinaturaController {
     private final CheckoutService checkoutService;
     private final ClienteRepository clienteRepository;
 
-    public AssinaturaController(AssinaturaService assinaturaService, CheckoutService checkoutService, ClienteRepository clienteRepository) {
+    public AssinaturaController(
+            AssinaturaService assinaturaService, CheckoutService checkoutService, ClienteRepository clienteRepository) {
         this.assinaturaService = assinaturaService;
         this.checkoutService = checkoutService;
         this.clienteRepository = clienteRepository;
@@ -38,9 +37,9 @@ public class AssinaturaController {
     public CheckoutResponse iniciarCheckout(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
             @RequestBody @Valid CheckoutRequest checkoutRequest) {
-        Cliente cliente = this.clienteRepository.findByUsuarioId(usuarioAutenticado.getUsuario().getId()).orElseThrow();
-        String url =
-                this.checkoutService.criarSessao(cliente.getId(), checkoutRequest.planoId());
-        return new CheckoutResponse(url);
+        Cliente cliente = this.clienteRepository
+                .findByUsuarioId(usuarioAutenticado.getUsuario().getId())
+                .orElseThrow();
+        return this.checkoutService.criarSessao(cliente.getId(), checkoutRequest.planoId());
     }
 }

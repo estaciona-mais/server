@@ -1,14 +1,12 @@
 package com.estacionamais.server.service;
 
-import com.estacionamais.server.exception.AssinaturaJaAtivaException;
+import com.estacionamais.server.dto.stripe.CheckoutResponse;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Plano;
-import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.StatusAssinatura;
 import com.estacionamais.server.repository.AssinaturaRepository;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.PlanoRepository;
-import com.estacionamais.server.repository.UsuarioRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
@@ -22,33 +20,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class CheckoutService {
     private final ClienteRepository clienteRepository;
-    private final UsuarioRepository usuarioRepository;
     private final PlanoRepository planoRepository;
     private final AssinaturaRepository assinaturaRepository;
     private final String frontUrl;
 
     public CheckoutService(
             ClienteRepository clienteRepository,
-            UsuarioRepository usuarioRepository,
             PlanoRepository planoRepository,
-            AssinaturaRepository AssinaturaRepository,
+            AssinaturaRepository assinaturaRepository,
             @Value("${app.front-url}") String frontUrl) {
         this.clienteRepository = clienteRepository;
-        this.usuarioRepository = usuarioRepository;
         this.planoRepository = planoRepository;
-        this.assinaturaRepository = AssinaturaRepository;
+        this.assinaturaRepository = assinaturaRepository;
         this.frontUrl = frontUrl;
     }
 
-    public String criarSessao(Long clienteId, Long planoId) {
+    public CheckoutResponse criarSessao(Long clienteId, Long planoId) {
         Cliente cliente = this.clienteRepository.findById(clienteId).orElseThrow();
         Plano plano = this.planoRepository.findById(planoId).orElseThrow();
+
+        String urlSucesso = frontUrl + "/assinatura/sucesso?session_id={CHECKOUT_SESSION_ID}";
+        String urlCancelada = frontUrl + "/assinatura/cancelada";
 
         boolean jaAssina = this.assinaturaRepository.existsByClienteIdAndStatusInAndValidadeAfter(
                 clienteId, List.of(StatusAssinatura.ATIVA), OffsetDateTime.now().toLocalDate());
 
         if (jaAssina) {
-            throw new AssinaturaJaAtivaException("Você já possui uma assinatura ativa.");
+            return new CheckoutResponse(urlCancelada, "Você já possui uma assinatura ativa.", 400);
         }
 
         try {
@@ -61,15 +59,16 @@ public class CheckoutService {
                             .setPrice(plano.getStripePriceId())
                             .setQuantity(1L)
                             .build())
-                    .setSuccessUrl(frontUrl + "/assinatura/sucesso?session_id={CHECKOUT_SESSION_ID}")
-                    .setCancelUrl(frontUrl + "/assinatura/cancelada")
+                    .setSuccessUrl(urlSucesso)
+                    .setCancelUrl(urlCancelada)
                     .setClientReferenceId(cliente.getId().toString())
                     .build();
 
             Session sessao = Session.create(parametros);
-            return sessao.getUrl();
+            return new CheckoutResponse(sessao.getUrl(), "", 201);
         } catch (StripeException e) {
-            throw new RuntimeException(e);
+            return new CheckoutResponse(
+                    urlCancelada, "Ocorreu um erro durante o pagamento. Por favor, tente novamente.", 400);
         }
     }
 

@@ -49,7 +49,9 @@ public class ConfiguracaoSeguranca {
                                 .permitAll()
                                 .requestMatchers(
                                         HttpMethod.POST,
-                                        "/api/usuarios/google/consulta")
+                                        "/api/usuarios/google/consulta",
+                                        "/api/clientes",
+                                        "/api/clientes/google")
                                 .permitAll()
                                 .requestMatchers(
                                         "/api/clientes/consulta",

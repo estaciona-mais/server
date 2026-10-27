@@ -42,6 +42,7 @@ public class AuthService {
             return new LoginResponse(
                     token,
                     usuarioAutenticado.getUsuario().getNome(),
+                    usuarioAutenticado.getUsuario().getEmail(),
                     usuarioAutenticado.getUsuario().getPapel().name());
         } catch (AuthenticationException e) {
             throw new RuntimeException("Credenciais invalidas.");
@@ -54,6 +55,7 @@ public class AuthService {
         DadosGoogle dados = this.googleTokenService.validar(googleLoginRequest.credential());
         Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
         String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuario));
-        return new LoginResponse(token, usuario.getNome(), usuario.getPapel().name());
+        return new LoginResponse(
+                token, usuario.getNome(), usuario.getEmail(), usuario.getPapel().name());
     }
 }
