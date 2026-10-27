@@ -3,8 +3,9 @@ package com.estacionamais.server.service;
 import com.estacionamais.server.dto.usuario.*;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.Papel;
-import com.estacionamais.server.model.enums.Provider;
 import com.estacionamais.server.repository.UsuarioRepository;
+import com.estacionamais.server.security.DadosGoogle;
+import com.estacionamais.server.security.GoogleTokenService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Sort;
@@ -15,10 +16,15 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GoogleTokenService googleTokenService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(
+            UsuarioRepository usuarioRepository,
+            PasswordEncoder passwordEncoder,
+            GoogleTokenService googleTokenService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.googleTokenService = googleTokenService;
     }
 
     public List<FichaUsuario> listarTodos() {
@@ -50,6 +56,13 @@ public class UsuarioService {
 
         Usuario novoUsuario = usuarioRepository.save(usuario);
         return new FichaUsuario(novoUsuario.getId(), novoUsuario.getNome(), novoUsuario.getEmail());
+    }
+
+    public BuscaUsuarioGoogleResponse buscarUsuarioGoogle(String credential) {
+        DadosGoogle dados = this.googleTokenService.validar(credential);
+        boolean contemProviderId = this.usuarioRepository.existsByProviderId(dados.providerId());
+        // boolean contemVeiculosVinculados =
+        return new BuscaUsuarioGoogleResponse(contemProviderId);
     }
 
     // TODO: atualizar os valores no banco

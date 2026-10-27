@@ -18,4 +18,9 @@ public class UsuarioController {
     public FichaUsuario cadastrar(@RequestBody @Valid UsuarioCadastro usuarioCadastro) {
         return usuarioService.cadastrar(usuarioCadastro);
     }
+
+    @PostMapping("/google/consulta")
+    public BuscaUsuarioGoogleResponse buscarUsuarioGoogle(@RequestBody String credential) {
+        return this.usuarioService.buscarUsuarioGoogle(credential);
+    }
 }
