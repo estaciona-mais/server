@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VagaService {
-    private VagaRepository vagaRepository;
-    private VeiculoService veiculoService;
-    private MovimentacaoRepository movimentacaoRepository;
+    private final VagaRepository vagaRepository;
+    private final VeiculoService veiculoService;
+    private final MovimentacaoRepository movimentacaoRepository;
 
     public VagaService(
             VagaRepository vagaRepository,

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EnderecoService {
-    private EnderecoRepository planoRepository;
+    private final EnderecoRepository planoRepository;
 
     public EnderecoService(EnderecoRepository planoRepository) {
         this.planoRepository = planoRepository;

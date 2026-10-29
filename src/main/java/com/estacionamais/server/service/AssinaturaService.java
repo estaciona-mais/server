@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AssinaturaService {
-    private AssinaturaRepository assinaturaRepository;
+    private final AssinaturaRepository assinaturaRepository;
 
     public AssinaturaService(AssinaturaRepository pagamentoRepository) {
         this.assinaturaRepository = pagamentoRepository;

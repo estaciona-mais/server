@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlanoService {
-    private PlanoRepository planoRepository;
+    private final PlanoRepository planoRepository;
 
     public PlanoService(PlanoRepository planoRepository) {
         this.planoRepository = planoRepository;

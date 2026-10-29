@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VeiculoService {
-    private VeiculoRepository veiculoRepository;
-    private ClienteRepository clienteRepository;
+    private final VeiculoRepository veiculoRepository;
+    private final ClienteRepository clienteRepository;
 
     public VeiculoService(VeiculoRepository veiculoRepository, ClienteRepository clienteRepository) {
         this.veiculoRepository = veiculoRepository;
