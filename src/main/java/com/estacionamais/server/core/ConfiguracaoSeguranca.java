@@ -43,6 +43,7 @@ public class ConfiguracaoSeguranca {
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/api/planos",
+                                        "/api/vagas/ocupacao",
                                         "/api/veiculos/cores",
                                         "/api/veiculos/tipos",
                                         "/api/veiculos")
