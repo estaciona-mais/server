@@ -1,0 +1,56 @@
+# =========================================================================
+# DOCKER COMPOSE – AMBIENTE LOCAL (API + POSTGRESQL)
+# =========================================================================
+# Comandos:
+#   docker-compose up --build >> prepara uma imagem e inicia todos os seus contêiners
+#   docker-compose down       >> finaliza todos os contêiners ativos,
+#                                mantendo os dados no banco
+#   docker-compose down -v    >> finaliza todos os contêiners ativos,
+#                                deletando os dados no banco
+# =========================================================================
+
+# Configuração de cada contêiner.
+services:
+  db:
+    image: postgres:18-alpine
+    # Variáveis utilizadas apenas na primeira inicialização do postgres para seu setup.
+    environment:
+      POSTGRES_DB: estaciona_mais
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    # Armazenamentos persistentes para o contêiner.
+    volumes:
+      # Aqui, valores diferentes serão usados, dependendo da versão do PostgreSQL utilizado na sua máquina:
+      # - para a versão 17, utilize /var/lib/postgresql/data;
+      # - para as versões 18+, utilize /var/lib/postgresql.
+      # Para mais informações consulte: https://hub.docker.com/_/postgres#pgdata.
+      - dados-postgres:/var/lib/postgresql
+    # Confere se o contêiner concluiu sua inicialização.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d estaciona_mais"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    # Prepara uma build para o projeto a partir do Dockerfile.
+    build: .
+    # Exige que o postgres esteja pronto antes de iniciar.
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    # Se conecta com o db definido, sobrescrevendo as variáveis de ambiente.
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/estaciona_mais
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      PORT: 8080
+    ports:
+      - "8080:8080"
+
+volumes:
+  dados-postgres:
