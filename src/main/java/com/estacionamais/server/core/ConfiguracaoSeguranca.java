@@ -2,6 +2,9 @@ package com.estacionamais.server.core;
 
 import com.estacionamais.server.security.JwtAuthenticationFilter;
 import java.util.List;
+import java.util.ListIterator;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,9 +73,12 @@ public class ConfiguracaoSeguranca {
         return httpSecurity.build();
     }
 
+    @Value("${app.cors.origens-permitidas")
+    private List<String> origensPermitidas;
+
     public CorsConfigurationSource configuracaoCors() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOriginPatterns(this.origensPermitidas);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
