@@ -2,8 +2,6 @@ package com.estacionamais.server.core;
 
 import com.estacionamais.server.security.JwtAuthenticationFilter;
 import java.util.List;
-import java.util.ListIterator;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
@@ -73,7 +71,7 @@ public class ConfiguracaoSeguranca {
         return httpSecurity.build();
     }
 
-    @Value("${app.cors.origens-permitidas")
+    @Value("${app.cors.origens-permitidas}")
     private List<String> origensPermitidas;
 
     public CorsConfigurationSource configuracaoCors() {
