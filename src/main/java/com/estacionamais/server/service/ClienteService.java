@@ -1,7 +1,9 @@
 package com.estacionamais.server.service;
 
 import com.estacionamais.server.dto.cliente.*;
-import com.estacionamais.server.dto.usuario.FichaUsuario;
+import com.estacionamais.server.dto.usuario.CadastroUsuarioResponse;
+import com.estacionamais.server.dto.usuario.LoginRequest;
+import com.estacionamais.server.dto.usuario.LoginResponse;
 import com.estacionamais.server.dto.usuario.UsuarioCadastro;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Usuario;
@@ -24,6 +26,7 @@ public class ClienteService {
     private final VeiculoRepository veiculoRepository;
     private final GoogleTokenService googleTokenService;
     private final GoogleAuthService googleAuthService;
+    private final AuthService authService;
 
     public ClienteService(
             UsuarioService usuarioService,
@@ -31,13 +34,15 @@ public class ClienteService {
             ClienteRepository clienteRepository,
             VeiculoRepository veiculoRepository,
             GoogleTokenService googleTokenService,
-            GoogleAuthService googleAuthService) {
+            GoogleAuthService googleAuthService,
+            AuthService authService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.clienteRepository = clienteRepository;
         this.veiculoRepository = veiculoRepository;
         this.googleTokenService = googleTokenService;
         this.googleAuthService = googleAuthService;
+        this.authService = authService;
     }
 
     public List<DadosCliente> listarTodos() {
@@ -84,28 +89,35 @@ public class ClienteService {
                 cliente.getAviso()));
     }
 
-    public DadosCliente cadastrar(ClienteRequest req) {
-        FichaUsuario usuarioCadastrado = this.usuarioService.cadastrar(
+    public CadastroClienteResponse cadastrar(ClienteRequest req) {
+        CadastroUsuarioResponse usuarioCadastrado = this.usuarioService.cadastrar(
                 new UsuarioCadastro(req.nome(), req.email(), req.senha(), req.provider(), req.providerId()));
-        Usuario usuario =
-                this.usuarioRepository.findById(usuarioCadastrado.id()).orElseThrow();
-
+        Usuario usuario = this.usuarioRepository.findByEmail(req.email()).orElseThrow();
         Cliente cliente = criarCliente(usuario);
-        return new DadosCliente(
-                cliente.getId(),
-                cliente.getUsuario().getNome(),
-                cliente.getUsuario().getEmail(),
-                cliente.getCriadoEm(),
-                cliente.getAviso());
+
+        return deCadastroUsuarioResponse(usuarioCadastrado, cliente.getId());
     }
 
-    public DadosCliente cadastrarGoogle(ClienteRequest clienteRequest) {
+    private CadastroClienteResponse deCadastroUsuarioResponse(CadastroUsuarioResponse res, Long id) {
+        return new CadastroClienteResponse(
+                res.mensagem(), res.codigoStatus(), res.token(), id, res.nome(), res.email(), res.papel());
+    }
+
+    public CadastroClienteResponse cadastrarGoogle(ClienteRequest clienteRequest) {
         DadosGoogle dados = this.googleTokenService.validar(clienteRequest.credential());
+        LoginResponse loginResponse =
+                this.authService.login(new LoginRequest(clienteRequest.email(), clienteRequest.senha()));
         Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
         Cliente cliente = criarCliente(usuario);
-        usuario = cliente.getUsuario();
-        return new DadosCliente(
-                cliente.getId(), usuario.getNome(), usuario.getEmail(), cliente.getCriadoEm(), cliente.getAviso());
+
+        return new CadastroClienteResponse(
+                "",
+                201,
+                loginResponse.token(),
+                cliente.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getPapel().toString());
     }
 
     private Cliente criarCliente(Usuario usuario) {

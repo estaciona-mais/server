@@ -1,5 +1,6 @@
 package com.estacionamais.server.service;
 
+import com.estacionamais.server.dto.*;
 import com.estacionamais.server.dto.veiculo.*;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Veiculo;
@@ -51,54 +52,12 @@ public class VeiculoService {
         return itens;
     }
 
-    public Optional<VeiculoResponse> buscarPorId(Long id) {
-        return listarTodos().stream().filter(v -> v.clienteId() == id).findFirst();
-    }
+    // AVISO: o veículo deve ser armazenado APÓS o cadastro do cliente.
+    public CadastroResponse cadastrar(VeiculoRequest req) {
+        if (veiculoRepository.existsByPlaca(req.placa())) {
+            return new CadastroResponse("Veículo já registrado.", 409);
+        }
 
-    public List<VeiculoResponse> buscarPorNomeCliente(String nomeCliente) {
-        return listarTodos().stream()
-                .filter(v -> v.nomeCliente().toLowerCase().equals(nomeCliente))
-                .toList();
-    }
-
-    public Optional<VeiculoResponse> buscarPorPlaca(String placa) {
-        return listarTodos().stream()
-                .filter(v -> v.placa().toUpperCase().equals(placa.toUpperCase()))
-                .findFirst();
-    }
-
-    public List<VeiculoResponse> buscarPorFabricante(String fabricante) {
-        return listarTodos().stream()
-                .filter(v -> v.fabricante().toLowerCase().equals(fabricante))
-                .toList();
-    }
-
-    public List<VeiculoResponse> buscarPorModelo(String modelo) {
-        return listarTodos().stream()
-                .filter(v -> v.modelo().toLowerCase().equals(modelo))
-                .toList();
-    }
-
-    public List<VeiculoResponse> buscarPorAno(Integer ano) {
-        return listarTodos().stream().filter(v -> v.ano() == ano).toList();
-    }
-
-    public List<VeiculoResponse> buscarPorCor(CorVeiculo cor) {
-        return listarTodos().stream().filter(v -> v.cor().equals(cor)).toList();
-    }
-
-    public List<VeiculoResponse> buscarPorTipo(TipoVeiculo tipo) {
-        return listarTodos().stream().filter(v -> v.tipo().equals(tipo)).toList();
-    }
-
-    public List<VeiculoResponse> buscarPorObservacao(String obs) {
-        return listarTodos().stream()
-                .filter(v -> v.observacao().toLowerCase().contains(obs))
-                .toList();
-    }
-
-    // AVISO: o veículo deve ser armazenado APÓS o cadastro do usuário
-    public VeiculoResponse criar(VeiculoRequest req) {
         Cliente cliente = clienteRepository.findById(req.clienteId()).orElseThrow();
 
         Veiculo veiculo = new Veiculo();
@@ -111,7 +70,7 @@ public class VeiculoService {
         veiculo.setCor(req.cor());
         veiculo.setObservacao(req.observacao());
 
-        Veiculo salvo = this.veiculoRepository.save(veiculo);
-        return this.paraDto(salvo);
+        this.veiculoRepository.save(veiculo);
+        return new CadastroResponse("", 201);
     }
 }

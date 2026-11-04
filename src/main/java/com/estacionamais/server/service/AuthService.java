@@ -40,6 +40,7 @@ public class AuthService {
             String token = jwtService.gerarToken(usuarioAutenticado);
 
             return new LoginResponse(
+                    "",
                     token,
                     usuarioAutenticado.getUsuario().getNome(),
                     usuarioAutenticado.getUsuario().getEmail(),
@@ -54,7 +55,7 @@ public class AuthService {
     public LoginResponse loginGoogle(GoogleLoginRequest googleLoginRequest) {
         DadosGoogle dados = this.googleTokenService.validar(googleLoginRequest.credential());
         Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
-        String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuario));
+        String token = this.jwtService.gerarToken(usuario);
         return new LoginResponse(
                 token, usuario.getNome(), usuario.getEmail(), usuario.getPapel().name());
     }

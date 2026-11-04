@@ -17,14 +17,17 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final GoogleTokenService googleTokenService;
+    private final AuthService authService;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
-            GoogleTokenService googleTokenService) {
+            GoogleTokenService googleTokenService,
+            AuthService authService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.googleTokenService = googleTokenService;
+        this.authService = authService;
     }
 
     public List<FichaUsuario> listarTodos() {
@@ -41,9 +44,9 @@ public class UsuarioService {
         return listarTodos().stream().filter(usuario -> usuario.id().equals(id)).findFirst();
     }
 
-    public FichaUsuario cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
+    public CadastroUsuarioResponse cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
         if (usuarioRepository.existsByEmail(usuarioCadastro.email())) {
-            throw new IllegalArgumentException("Usuário já cadastrado.");
+            return new CadastroUsuarioResponse("Usuário já cadastrado.", 409, "", "", "", "");
         }
 
         Usuario usuario = new Usuario();
@@ -58,7 +61,16 @@ public class UsuarioService {
         usuario.setProviderId(usuarioCadastro.providerId());
 
         Usuario novoUsuario = usuarioRepository.save(usuario);
-        return new FichaUsuario(novoUsuario.getId(), novoUsuario.getNome(), novoUsuario.getEmail());
+        LoginResponse loginResponse =
+                this.authService.login(new LoginRequest(novoUsuario.getEmail(), usuarioCadastro.senha()));
+        String token = loginResponse.token();
+        return new CadastroUsuarioResponse(
+                "",
+                201,
+                token,
+                novoUsuario.getNome(),
+                novoUsuario.getEmail(),
+                novoUsuario.getPapel().toString());
     }
 
     public BuscaUsuarioGoogleResponse buscarUsuarioGoogle(String credential) {

@@ -21,12 +21,12 @@ public class ClienteController {
     }
 
     @PostMapping
-    public DadosCliente cadastrar(@RequestBody @Valid ClienteRequest cliente) {
+    public CadastroClienteResponse cadastrar(@RequestBody @Valid ClienteRequest cliente) {
         return this.clienteService.cadastrar(cliente);
     }
 
     @PostMapping("/google")
-    public DadosCliente cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) {
+    public CadastroClienteResponse cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) {
         return this.clienteService.cadastrarGoogle(cliente);
     }
 
