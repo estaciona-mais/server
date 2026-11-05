@@ -3,6 +3,7 @@ package com.estacionamais.server.service;
 import com.estacionamais.server.dto.usuario.*;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.Papel;
+import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
@@ -18,16 +19,19 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final GoogleTokenService googleTokenService;
     private final AuthService authService;
+    private final ClienteRepository clienteRepository;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
             GoogleTokenService googleTokenService,
-            AuthService authService) {
+            AuthService authService,
+            ClienteRepository clienteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.googleTokenService = googleTokenService;
         this.authService = authService;
+        this.clienteRepository = clienteRepository;
     }
 
     public List<FichaUsuario> listarTodos() {
@@ -45,7 +49,8 @@ public class UsuarioService {
     }
 
     public CadastroUsuarioResponse cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
-        if (usuarioRepository.existsByEmail(usuarioCadastro.email())) {
+        Optional<Usuario> cadastrado = usuarioRepository.findByEmail(usuarioCadastro.email());
+        if (cadastrado.isPresent() && usuarioCadastrado(cadastrado.get())) {
             return new CadastroUsuarioResponse("Usuário já cadastrado.", 409, "", "", "", "");
         }
 
@@ -60,7 +65,9 @@ public class UsuarioService {
         usuario.setProvider(usuarioCadastro.provider());
         usuario.setProviderId(usuarioCadastro.providerId());
 
-        Usuario novoUsuario = usuarioRepository.save(usuario);
+        Usuario novoUsuario = usuarioRepository.existsByEmail(usuarioCadastro.email())
+                ? usuarioRepository.findByEmail(usuarioCadastro.email()).orElseThrow()
+                : usuarioRepository.save(usuario);
         LoginResponse loginResponse =
                 this.authService.login(new LoginRequest(novoUsuario.getEmail(), usuarioCadastro.senha()));
         String token = loginResponse.token();
@@ -70,14 +77,29 @@ public class UsuarioService {
                 token,
                 novoUsuario.getNome(),
                 novoUsuario.getEmail(),
-                novoUsuario.getPapel().toString());
+                novoUsuario.getPapel().name());
     }
 
     public BuscaUsuarioGoogleResponse buscarUsuarioGoogle(String credential) {
         DadosGoogle dados = this.googleTokenService.validar(credential);
+
         boolean contemProviderId = this.usuarioRepository.existsByProviderId(dados.providerId());
-        // boolean contemVeiculosVinculados =
-        return new BuscaUsuarioGoogleResponse(contemProviderId);
+        if (!contemProviderId) {
+            return new BuscaUsuarioGoogleResponse(false);
+        }
+
+        Usuario usuario = this.usuarioRepository.findByEmail(dados.email()).orElseThrow();
+
+        boolean usuarioValido = usuarioCadastrado(usuario);
+
+        return new BuscaUsuarioGoogleResponse(usuarioValido);
+    }
+
+    private boolean usuarioCadastrado(Usuario usuario) {
+        boolean papelAdmin = usuario.getPapel().equals(Papel.ADMIN);
+        boolean papelCliente = usuario.getPapel().equals(Papel.CLIENTE);
+        boolean clienteExiste = this.clienteRepository.existsByUsuarioId(usuario.getId());
+        return papelAdmin || (papelCliente && clienteExiste);
     }
 
     // TODO: atualizar os valores no banco

@@ -2,6 +2,8 @@ package com.estacionamais.server.controller;
 
 import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.service.ClienteService;
+
+import jakarta.servlet.ServletException;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +24,12 @@ public class ClienteController {
 
     @PostMapping
     public CadastroClienteResponse cadastrar(@RequestBody @Valid ClienteRequest cliente) {
-        return this.clienteService.cadastrar(cliente);
+        return this.clienteService.cadastrarComApi(cliente);
     }
 
     @PostMapping("/google")
-    public CadastroClienteResponse cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) {
-        return this.clienteService.cadastrarGoogle(cliente);
+    public CadastroClienteResponse cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) throws ServletException {
+        return this.clienteService.cadastrarComGoogle(cliente);
     }
 
     @PostMapping("/consulta")

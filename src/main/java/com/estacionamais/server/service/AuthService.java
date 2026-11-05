@@ -8,6 +8,7 @@ import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
 import com.estacionamais.server.security.JwtService;
 import com.estacionamais.server.security.UsuarioAutenticado;
+import jakarta.servlet.ServletException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,7 @@ public class AuthService {
             String token = jwtService.gerarToken(usuarioAutenticado);
 
             return new LoginResponse(
-                    "",
+                    null,
                     token,
                     usuarioAutenticado.getUsuario().getNome(),
                     usuarioAutenticado.getUsuario().getEmail(),
@@ -54,9 +55,17 @@ public class AuthService {
 
     public LoginResponse loginGoogle(GoogleLoginRequest googleLoginRequest) {
         DadosGoogle dados = this.googleTokenService.validar(googleLoginRequest.credential());
-        Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
-        String token = this.jwtService.gerarToken(usuario);
-        return new LoginResponse(
-                token, usuario.getNome(), usuario.getEmail(), usuario.getPapel().name());
+        try {
+            Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
+            String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuario));
+            return new LoginResponse(
+                    null,
+                    token,
+                    usuario.getNome(),
+                    usuario.getEmail(),
+                    usuario.getPapel().name());
+        } catch (ServletException e) {
+            return new LoginResponse(e.getMessage(), null, null, null, null);
+        }
     }
 }

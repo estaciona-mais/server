@@ -5,6 +5,7 @@ import com.estacionamais.server.model.enums.Papel;
 import com.estacionamais.server.model.enums.Provider;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.security.DadosGoogle;
+import jakarta.servlet.ServletException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class GoogleAuthService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario entrarOuCadastrar(DadosGoogle dados) {
+    public Usuario entrarOuCadastrar(DadosGoogle dados) throws ServletException {
         if (!dados.emailVerified()) {
             throw new IllegalArgumentException("E-mail do Google não verificado.");
         }
