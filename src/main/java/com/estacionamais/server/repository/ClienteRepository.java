@@ -10,4 +10,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     public Optional<Cliente> findByUsuarioNome(String nome);
 
     public Optional<Cliente> findByStripeCustomerId(String stripeCustomerId);
+
+    public boolean existsByUsuarioId(Long usuarioId);
 }

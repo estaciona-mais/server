@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class FinanceiroService {
     private final AssinaturaService assinaturaService;
-    private final ClienteService clienteService;
 
-    public FinanceiroService(AssinaturaService assinaturaService, ClienteService clienteService) {
+    public FinanceiroService(AssinaturaService assinaturaService) {
         this.assinaturaService = assinaturaService;
-        this.clienteService = clienteService;
     }
 
     public RelatorioFinanceiroResponse gerarRelatorioFinanceiro(RelatorioFinanceiroRequest req)

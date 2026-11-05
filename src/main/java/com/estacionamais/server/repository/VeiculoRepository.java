@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     public Optional<Veiculo> findByPlaca(String placa);
 
-    // public boolean
+    public boolean existsByPlaca(String placa);
 }

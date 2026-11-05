@@ -15,7 +15,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public FichaUsuario cadastrar(@RequestBody @Valid UsuarioCadastro usuarioCadastro) {
+    public CadastroUsuarioResponse cadastrar(@RequestBody @Valid UsuarioCadastro usuarioCadastro) {
         return usuarioService.cadastrar(usuarioCadastro);
     }
 

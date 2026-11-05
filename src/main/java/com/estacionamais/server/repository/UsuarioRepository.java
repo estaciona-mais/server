@@ -12,4 +12,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByProviderId(String providerId);
 
     boolean existsByProviderId(String providerId);
+
+    // boolean isPapelClienteByEmail(String email);
 }

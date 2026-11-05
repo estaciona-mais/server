@@ -16,7 +16,7 @@ public class GoogleTokenService {
     private static final Logger log = LoggerFactory.getLogger(GoogleTokenService.class);
 
     public GoogleTokenService(@Value("${google.client-id}") String clientId) {
-        log.info("Client ID:", clientId);
+        log.debug("Client ID: " + clientId);
         this.verificador = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance())
                 .setAudience(List.of(clientId))
                 .build();
@@ -25,7 +25,7 @@ public class GoogleTokenService {
     public DadosGoogle validar(String idToken) {
         try {
             GoogleIdToken token = this.verificador.verify(idToken);
-            log.info("Token ID:", idToken);
+            log.debug("Token ID: " + idToken);
             if (token == null) {
                 throw new IllegalArgumentException("Token do Google inválido.");
             }

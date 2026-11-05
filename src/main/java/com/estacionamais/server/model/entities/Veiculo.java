@@ -4,9 +4,6 @@ import com.estacionamais.server.core.Utils;
 import com.estacionamais.server.model.enums.CorVeiculo;
 import com.estacionamais.server.model.enums.TipoVeiculo;
 
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.type.descriptor.jdbc.CharJdbcType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
