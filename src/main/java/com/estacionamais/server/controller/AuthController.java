@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.security.auth.message.AuthException;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/google")
-    public LoginResponse loginGoogle(@RequestBody GoogleLoginRequest googleLoginRequest) {
+    public LoginResponse loginGoogle(@RequestBody GoogleLoginRequest googleLoginRequest) throws AuthException {
         log.info("Começando login com Google...", googleLoginRequest);
         return this.authService.loginGoogle(googleLoginRequest);
     }

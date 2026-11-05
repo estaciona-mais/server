@@ -3,7 +3,7 @@ package com.estacionamais.server.controller;
 import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.service.ClienteService;
 
-import jakarta.servlet.ServletException;
+import jakarta.security.auth.message.AuthException;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class ClienteController {
     }
 
     @PostMapping("/google")
-    public CadastroClienteResponse cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) throws ServletException {
+    public CadastroClienteResponse cadastrarGoogle(@RequestBody @Valid ClienteRequest cliente) throws AuthException {
         return this.clienteService.cadastrarComGoogle(cliente);
     }
 

@@ -2,14 +2,10 @@ package com.estacionamais.server.service;
 
 import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.dto.usuario.CadastroUsuarioResponse;
-import com.estacionamais.server.dto.usuario.LoginRequest;
-import com.estacionamais.server.dto.usuario.LoginResponse;
 import com.estacionamais.server.dto.usuario.UsuarioCadastro;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.entities.Veiculo;
-import com.estacionamais.server.model.enums.Papel;
-import com.estacionamais.server.model.enums.Provider;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.repository.VeiculoRepository;
@@ -18,7 +14,7 @@ import com.estacionamais.server.security.GoogleTokenService;
 import com.estacionamais.server.security.JwtService;
 import com.estacionamais.server.security.UsuarioAutenticado;
 
-import jakarta.servlet.ServletException;
+import jakarta.security.auth.message.AuthException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +28,6 @@ public class ClienteService {
     private final VeiculoRepository veiculoRepository;
     private final GoogleTokenService googleTokenService;
     private final GoogleAuthService googleAuthService;
-    private final AuthService authService;
     private final JwtService jwtService;
 
     public ClienteService(
@@ -42,7 +37,6 @@ public class ClienteService {
             VeiculoRepository veiculoRepository,
             GoogleTokenService googleTokenService,
             GoogleAuthService googleAuthService,
-            AuthService authService,
             JwtService jwtService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
@@ -50,7 +44,6 @@ public class ClienteService {
         this.veiculoRepository = veiculoRepository;
         this.googleTokenService = googleTokenService;
         this.googleAuthService = googleAuthService;
-        this.authService = authService;
         this.jwtService = jwtService;
     }
 
@@ -106,7 +99,7 @@ public class ClienteService {
         return paraCadastroClienteResponse(usuarioCadastrado, cliente.getId());
     }
 
-    public CadastroClienteResponse cadastrarComGoogle(ClienteRequest clienteRequest) throws ServletException {
+    public CadastroClienteResponse cadastrarComGoogle(ClienteRequest clienteRequest) throws AuthException {
         DadosGoogle dados = this.googleTokenService.validar(clienteRequest.credential());
         Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
         Cliente cliente = this.criarCliente(usuario);

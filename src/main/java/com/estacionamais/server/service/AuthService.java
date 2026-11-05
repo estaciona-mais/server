@@ -4,11 +4,14 @@ import com.estacionamais.server.dto.google.GoogleLoginRequest;
 import com.estacionamais.server.dto.usuario.LoginRequest;
 import com.estacionamais.server.dto.usuario.LoginResponse;
 import com.estacionamais.server.model.entities.Usuario;
+import com.estacionamais.server.model.enums.Papel;
+import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
 import com.estacionamais.server.security.JwtService;
 import com.estacionamais.server.security.UsuarioAutenticado;
-import jakarta.servlet.ServletException;
+
+import jakarta.security.auth.message.AuthException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,16 +24,19 @@ public class AuthService {
     private final JwtService jwtService;
     private final GoogleAuthService googleAuthService;
     private final GoogleTokenService googleTokenService;
+    private final ClienteRepository clienteRepository;
 
     public AuthService(
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             GoogleAuthService googleAuthService,
-            GoogleTokenService googleTokenService) {
+            GoogleTokenService googleTokenService,
+            ClienteRepository clienteRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.googleAuthService = googleAuthService;
         this.googleTokenService = googleTokenService;
+        this.clienteRepository = clienteRepository;
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
@@ -53,19 +59,32 @@ public class AuthService {
         }
     }
 
+    // TODO: o cliente atualmente pode se cadastrar pelo login, sem cadastrar um veículo
     public LoginResponse loginGoogle(GoogleLoginRequest googleLoginRequest) {
         DadosGoogle dados = this.googleTokenService.validar(googleLoginRequest.credential());
         try {
-            Usuario usuario = this.googleAuthService.entrarOuCadastrar(dados);
-            String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuario));
+            Usuario usuarioCadastrado = this.googleAuthService.entrarOuCadastrar(dados);
+            boolean estaCadastrado = this.buscarCadastroUsuario(usuarioCadastrado);
+            if (!estaCadastrado) {
+                throw new AuthException("Usuário não existente. Por favor, realize seu cadastro.");
+            }
+
+            String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuarioCadastrado));
             return new LoginResponse(
                     null,
                     token,
-                    usuario.getNome(),
-                    usuario.getEmail(),
-                    usuario.getPapel().name());
-        } catch (ServletException e) {
+                    usuarioCadastrado.getNome(),
+                    usuarioCadastrado.getEmail(),
+                    usuarioCadastrado.getPapel().name());
+        } catch (Exception e) {
             return new LoginResponse(e.getMessage(), null, null, null, null);
         }
+    }
+
+    public boolean buscarCadastroUsuario(Usuario usuario) {
+        boolean papelAdmin = usuario.getPapel().equals(Papel.ADMIN);
+        boolean papelCliente = usuario.getPapel().equals(Papel.CLIENTE);
+        boolean clienteExiste = this.clienteRepository.existsByUsuarioId(usuario.getId());
+        return papelAdmin || (papelCliente && clienteExiste);
     }
 }

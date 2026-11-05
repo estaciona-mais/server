@@ -3,7 +3,6 @@ package com.estacionamais.server.service;
 import com.estacionamais.server.dto.usuario.*;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.enums.Papel;
-import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
@@ -19,19 +18,16 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final GoogleTokenService googleTokenService;
     private final AuthService authService;
-    private final ClienteRepository clienteRepository;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
             GoogleTokenService googleTokenService,
-            AuthService authService,
-            ClienteRepository clienteRepository) {
+            AuthService authService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.googleTokenService = googleTokenService;
         this.authService = authService;
-        this.clienteRepository = clienteRepository;
     }
 
     public List<FichaUsuario> listarTodos() {
@@ -50,7 +46,7 @@ public class UsuarioService {
 
     public CadastroUsuarioResponse cadastrar(UsuarioCadastro usuarioCadastro) throws IllegalArgumentException {
         Optional<Usuario> cadastrado = usuarioRepository.findByEmail(usuarioCadastro.email());
-        if (cadastrado.isPresent() && usuarioCadastrado(cadastrado.get())) {
+        if (cadastrado.isPresent() && this.authService.buscarCadastroUsuario(cadastrado.get())) {
             return new CadastroUsuarioResponse("Usuário já cadastrado.", 409, "", "", "", "");
         }
 
@@ -90,16 +86,9 @@ public class UsuarioService {
 
         Usuario usuario = this.usuarioRepository.findByEmail(dados.email()).orElseThrow();
 
-        boolean usuarioValido = usuarioCadastrado(usuario);
+        boolean usuarioValido = this.authService.buscarCadastroUsuario(usuario);
 
         return new BuscaUsuarioGoogleResponse(usuarioValido);
-    }
-
-    private boolean usuarioCadastrado(Usuario usuario) {
-        boolean papelAdmin = usuario.getPapel().equals(Papel.ADMIN);
-        boolean papelCliente = usuario.getPapel().equals(Papel.CLIENTE);
-        boolean clienteExiste = this.clienteRepository.existsByUsuarioId(usuario.getId());
-        return papelAdmin || (papelCliente && clienteExiste);
     }
 
     // TODO: atualizar os valores no banco
