@@ -40,6 +40,7 @@ public class StripeSincronizacaoService {
     public void processar(Event evento) {
         switch (evento.getType()) {
             case "checkout.session.completed" -> {
+                log.info("Sessão de checkout concluída.");
                 Session sessao = (Session) extrairObjeto(evento);
                 if (sessao.getSubscription() != null) {
                     sincronizar(sessao.getSubscription());
@@ -47,6 +48,7 @@ public class StripeSincronizacaoService {
             }
 
             case "customer.subscription.updated", "customer.subscription.deleted" -> {
+                log.info("Pagamento cancelado.");
                 Subscription inscricao = (Subscription) extrairObjeto(evento);
                 sincronizar(inscricao.getId());
             }
@@ -69,6 +71,7 @@ public class StripeSincronizacaoService {
 
     private void sincronizar(String subscriptionId) {
         try {
+            log.info("Iniciando registro de assinatura...");
             Subscription atual = Subscription.retrieve(subscriptionId);
             Cliente cliente = this.clienteRepository
                     .findByStripeCustomerId(atual.getCustomer())
@@ -98,6 +101,7 @@ public class StripeSincronizacaoService {
                     LocalDate.ofInstant(Instant.ofEpochSecond(item.getCurrentPeriodEnd()), ZoneOffset.UTC));
 
             this.assinaturaRepository.save(assinatura);
+            log.info("Assinatura registrada com sucesso.");
         } catch (StripeException e) {
             log.error("Erro ao sincronizar assinatura {}", subscriptionId, e);
         }
