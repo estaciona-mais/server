@@ -39,7 +39,7 @@ public class ConfiguracaoSeguranca {
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        regras -> regras.requestMatchers("/api/auth/**", "/api/webhook/**", "/api/veiculos")
+                        regras -> regras.requestMatchers("/api/auth/**", "/api/webhook/**")
                                 .permitAll()
                                 .requestMatchers(
                                         HttpMethod.GET,
@@ -51,12 +51,12 @@ public class ConfiguracaoSeguranca {
                                 .permitAll()
                                 .requestMatchers(
                                         HttpMethod.POST,
-                                        "/api/usuarios/google/consulta",
                                         "/api/clientes",
-                                        "/api/clientes/google")
+                                        "/api/clientes/google",
+                                        "/api/usuarios/google/consulta",
+                                        "/api/veiculos")
                                 .permitAll()
                                 .requestMatchers(
-                                        "/api/clientes/consulta",
                                         "/api/enderecos/**",
                                         "/api/movimentacoes/**",
                                         "/api/veiculos/**",
