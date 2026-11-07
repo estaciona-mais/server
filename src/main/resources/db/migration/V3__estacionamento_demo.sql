@@ -23,13 +23,13 @@ INSERT INTO cliente (usuario_id, stripe_customer_id) VALUES
   (8, 'cus_vod9wfxMilwb3Lcx1tQfsB1z541d9RRFMiSJaPo2auMPME4BQD4poI4O');
 
 
-INSERT INTO assinatura (cliente_id, plano_id, emissao, validade, metodo_pagamento, stripe_subscription_id) VALUES
-  (1, 3, '2026-04-12 12:00:00', '2026-07-12','DEBITO',   'sub_WtWR26RciEl2UDMPft0TrzBp2t2xag1YZtZVasKpjkLxLu6jl3wg7e8v'),
-  (2, 1, '2026-04-12 12:00:00', '2026-05-12','PIX',      'sub_icOiAID3CGe5U7f2ibqgqWDpLY2aXKMzXTMRm94eMuFxBNTctEY5XuEh'),
-  (3, 1, '2026-04-12 12:00:00', '2026-05-12','PIX',      'sub_Et88IaPMheXyrAQsSzwTQvMKYJe5yhMqZuYYVVjRqYTaN62CYkRxcDzZ'),
-  (4, 4, '2026-04-12 12:00:00', '2026-10-12','DEBITO',   'sub_GP0ialN2t1acNBEeKxuECkSC47CN8rMcJzvmw7meLzguEkWwwxksmuOM'),
-  (5, 2, '2026-04-12 12:00:00', '2026-06-12','CREDITO',  'sub_lamXp4IBdGmda2zvENEcWAlkGQsxa6oi56yFXcgkis5L4OBsRHN2J7uv'),
-  (6, 5, '2026-04-12 12:00:00', '2027-04-12','PIX',      'sub_EVCrx92l93QKiXJT7aWDCOGix4jLQTibPx7n8yvlEdBIoLxjDxougiPL');
+INSERT INTO assinatura (cliente_id, plano_id, emissao, validade, stripe_subscription_id) VALUES
+  (1, 3, '2026-04-12 12:00:00', '2026-07-12', 'sub_WtWR26RciEl2UDMPft0TrzBp2t2xag1YZtZVasKpjkLxLu6jl3wg7e8v'),
+  (2, 1, '2026-04-12 12:00:00', '2026-05-12', 'sub_icOiAID3CGe5U7f2ibqgqWDpLY2aXKMzXTMRm94eMuFxBNTctEY5XuEh'),
+  (3, 1, '2026-04-12 12:00:00', '2026-05-12', 'sub_Et88IaPMheXyrAQsSzwTQvMKYJe5yhMqZuYYVVjRqYTaN62CYkRxcDzZ'),
+  (4, 4, '2026-04-12 12:00:00', '2026-10-12', 'sub_GP0ialN2t1acNBEeKxuECkSC47CN8rMcJzvmw7meLzguEkWwwxksmuOM'),
+  (5, 2, '2026-04-12 12:00:00', '2026-06-12', 'sub_lamXp4IBdGmda2zvENEcWAlkGQsxa6oi56yFXcgkis5L4OBsRHN2J7uv'),
+  (6, 5, '2026-04-12 12:00:00', '2027-04-12', 'sub_EVCrx92l93QKiXJT7aWDCOGix4jLQTibPx7n8yvlEdBIoLxjDxougiPL');
 
 
 INSERT INTO endereco (cliente_id, cep, uf, cidade, bairro, rua, numero) VALUES
