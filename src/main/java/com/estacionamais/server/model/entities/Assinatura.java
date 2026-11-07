@@ -35,10 +35,6 @@ public class Assinatura {
     @Column(nullable = false)
     private StatusAssinatura status;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private MetodoPagamento metodoPagamento;
-
     @Column(nullable = false, unique = true, length = 60)
     private String stripeSubscriptionId;
 
@@ -98,14 +94,6 @@ public class Assinatura {
 
     public void setStatus(StatusAssinatura status) {
         this.status = status;
-    }
-
-    public MetodoPagamento getMetodoPagamento() {
-        return metodoPagamento;
-    }
-
-    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
-        this.metodoPagamento = metodoPagamento;
     }
 
     public String getStripeSubscriptionId() {

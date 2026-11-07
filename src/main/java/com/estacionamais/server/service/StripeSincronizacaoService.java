@@ -16,6 +16,7 @@ import com.stripe.model.SubscriptionItem;
 import com.stripe.model.checkout.Session;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +97,8 @@ public class StripeSincronizacaoService {
                         return novaAssinatura;
                     });
             assinatura.setPlano(plano);
-            assinatura.setStatus(StatusAssinatura.valueOf(atual.getStatus().toUpperCase()));
+            assinatura.setStatus(StatusAssinatura.ATIVA);
+            assinatura.setEmissao(OffsetDateTime.now());
             assinatura.setValidade(
                     LocalDate.ofInstant(Instant.ofEpochSecond(item.getCurrentPeriodEnd()), ZoneOffset.UTC));
 
