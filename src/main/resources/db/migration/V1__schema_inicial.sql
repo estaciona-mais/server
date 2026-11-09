@@ -19,7 +19,7 @@ CREATE TABLE plano
   stripe_price_id TEXT   NOT NULL UNIQUE,
 
   CONSTRAINT ck_titulo_plano
-    CHECK (titulo IN ('MENSAL', 'BIMESTRAL', 'TRIMESTRAL', 'SEMESTRAL', 'ANUAL')),
+    CHECK (titulo IN ('MENSAL', 'ANUAL')),
   CONSTRAINT ck_largura_stripe_price_id_plano
     CHECK (length(stripe_price_id) = 30)
 );
@@ -80,7 +80,6 @@ CREATE TABLE assinatura
   validade               DATE         NOT NULL,
   atualizada_em          TIMESTAMPTZ,
   status                 TEXT         NOT NULL DEFAULT 'ATIVA',
-  metodo_pagamento       TEXT         NOT NULL,
   stripe_subscription_id TEXT         NOT NULL UNIQUE,
 
   CONSTRAINT fk_cliente_assinatura
@@ -90,9 +89,7 @@ CREATE TABLE assinatura
     FOREIGN KEY (plano_id) REFERENCES plano (id)
     ON DELETE CASCADE,
   CONSTRAINT ck_status_assinatura
-    CHECK (status IN ('ATIVA', 'INATIVA', 'CANCELADA')),
-  CONSTRAINT ck_metodo_pagamento_cliente
-      CHECK (metodo_pagamento IN ('DINHEIRO', 'DEBITO', 'CREDITO', 'PIX', 'BOLETO'))
+    CHECK (status IN ('ATIVA', 'INATIVA', 'CANCELADA'))
 );
 
 
