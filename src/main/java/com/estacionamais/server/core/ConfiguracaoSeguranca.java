@@ -38,35 +38,35 @@ public class ConfiguracaoSeguranca {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(configuracaoCors()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        regras -> regras.requestMatchers("/api/auth/**", "/api/webhook/**")
-                                .permitAll()
-                                .requestMatchers(
-                                        HttpMethod.GET,
-                                        "/api/planos",
-                                        "/api/vagas/ocupacao",
-                                        "/api/veiculos/cores",
-                                        "/api/veiculos/tipos",
-                                        "/api/veiculos")
-                                .permitAll()
-                                .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/api/clientes",
-                                        "/api/clientes/google",
-                                        "/api/usuarios/google/consulta",
-                                        "/api/veiculos")
-                                .permitAll()
-                                .requestMatchers(
-                                        "/api/enderecos/**",
-                                        "/api/movimentacoes/**",
-                                        "/api/veiculos/**",
-                                        "/api/vagas/**",
-                                        "/api/movimentacoes/**",
-                                        "/api/financeiro/**",
-                                        "/api/usuarios/**")
-                                .hasRole("ADMIN")
-                                .anyRequest()
-                                .authenticated())
+                .authorizeHttpRequests(regras -> regras.requestMatchers("/api/auth/**", "/api/webhook/**")
+                        .permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/clientes",
+                                "/api/planos",
+                                "/api/vagas/ocupacao",
+                                "/api/veiculos/cores",
+                                "/api/veiculos/tipos",
+                                "/api/veiculos")
+                        .permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/clientes",
+                                "/api/clientes/google",
+                                "/api/usuarios/google/consulta",
+                                "/api/veiculos")
+                        .permitAll()
+                        .requestMatchers(
+                                "/api/enderecos/**",
+                                "/api/movimentacoes/**",
+                                "/api/veiculos/**",
+                                "/api/vagas/**",
+                                "/api/movimentacoes/**",
+                                "/api/financeiro/**",
+                                "/api/usuarios/**")
+                        .hasRole("ADMIN")
+                        .anyRequest()
+                        .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
