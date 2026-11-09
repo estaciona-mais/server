@@ -3,11 +3,11 @@ package com.estacionamais.server.service;
 import com.estacionamais.server.dto.cliente.*;
 import com.estacionamais.server.dto.usuario.CadastroUsuarioResponse;
 import com.estacionamais.server.dto.usuario.UsuarioCadastro;
+import com.estacionamais.server.model.entities.Assinatura;
 import com.estacionamais.server.model.entities.Cliente;
 import com.estacionamais.server.model.entities.Usuario;
 import com.estacionamais.server.model.entities.Veiculo;
-import com.estacionamais.server.model.enums.Papel;
-import com.estacionamais.server.model.enums.Provider;
+import com.estacionamais.server.repository.AssinaturaRepository;
 import com.estacionamais.server.repository.ClienteRepository;
 import com.estacionamais.server.repository.UsuarioRepository;
 import com.estacionamais.server.repository.VeiculoRepository;
@@ -15,7 +15,6 @@ import com.estacionamais.server.security.DadosGoogle;
 import com.estacionamais.server.security.GoogleTokenService;
 import com.estacionamais.server.security.JwtService;
 import com.estacionamais.server.security.UsuarioAutenticado;
-
 import jakarta.security.auth.message.AuthException;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -31,6 +30,7 @@ public class ClienteService {
     private final GoogleTokenService googleTokenService;
     private final GoogleAuthService googleAuthService;
     private final JwtService jwtService;
+    private final AssinaturaRepository assinaturaRepository;
 
     public ClienteService(
             UsuarioService usuarioService,
@@ -39,7 +39,8 @@ public class ClienteService {
             VeiculoRepository veiculoRepository,
             GoogleTokenService googleTokenService,
             GoogleAuthService googleAuthService,
-            JwtService jwtService) {
+            JwtService jwtService,
+            AssinaturaRepository assinaturaRepository) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.clienteRepository = clienteRepository;
@@ -47,6 +48,7 @@ public class ClienteService {
         this.googleTokenService = googleTokenService;
         this.googleAuthService = googleAuthService;
         this.jwtService = jwtService;
+        this.assinaturaRepository = assinaturaRepository;
     }
 
     public List<DadosCliente> listarTodos() {
@@ -59,16 +61,23 @@ public class ClienteService {
     }
 
     private DadosCliente paraDto(Cliente cliente) {
+        List<Assinatura> assinaturas = this.assinaturaRepository.findByClienteIdOrderByEmissaoDesc(cliente.getId());
+        Assinatura assinatura = assinaturas.isEmpty() ? null : assinaturas.getFirst();
+
         return new DadosCliente(
                 cliente.getId(),
                 cliente.getUsuario().getNome(),
                 cliente.getUsuario().getEmail(),
                 cliente.getCriadoEm(),
-                cliente.getAviso());
+                cliente.getAviso(),
+                assinatura == null ? null : assinatura.getPlano().getTitulo(),
+                assinatura == null ? null : assinatura.getStatus());
     }
 
     public Optional<DadosCliente> buscarPorId(Long id) {
-        return listarTodos().stream().filter(usuario -> usuario.id().equals(id)).findFirst();
+        return listarTodos().stream()
+                .filter(usuario -> usuario.clienteId().equals(id))
+                .findFirst();
     }
 
     public Optional<DadosCliente> buscarCliente(ConsultaClienteRequest req) {
@@ -85,12 +94,17 @@ public class ClienteService {
             throw new RuntimeException("Nome ou placa deve ser informado.");
         }
 
+        Assinatura assinatura = this.assinaturaRepository
+                .findByClienteIdOrderByEmissaoDesc(cliente.getId())
+                .getFirst();
         return Optional.of(new DadosCliente(
                 cliente.getId(),
                 cliente.getUsuario().getNome(),
                 cliente.getUsuario().getEmail(),
                 cliente.getCriadoEm(),
-                cliente.getAviso()));
+                cliente.getAviso(),
+                assinatura.getPlano().getTitulo(),
+                assinatura.getStatus()));
     }
 
     public CadastroClienteResponse cadastrarComApi(ClienteRequest req) {
@@ -108,8 +122,13 @@ public class ClienteService {
         String token = this.jwtService.gerarToken(new UsuarioAutenticado(usuario));
 
         return new CadastroClienteResponse(
-                "", 201, token,
-                cliente.getId(), usuario.getNome(), usuario.getEmail(), usuario.getPapel().name());
+                "",
+                201,
+                token,
+                cliente.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getPapel().name());
     }
 
     private Cliente criarCliente(Usuario usuario) {

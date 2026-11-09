@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/movimentacao")
+@RequestMapping("/api/movimentacoes")
 public class MovimentacaoController {
     private final MovimentacaoService movimentacaoService;
 

@@ -38,7 +38,8 @@ public class MovimentacaoService {
                 movimentacao.getVeiculo().getPlaca(),
                 movimentacao.getVaga().getCodigo(),
                 movimentacao.getDataEntrada(),
-                movimentacao.getDataSaida());
+                movimentacao.getDataSaida(),
+                movimentacao.getVeiculo().getCliente().getId());
     }
 
     public List<MovimentacaoResponse> listarRelatorio(Integer limite) {
