@@ -19,7 +19,7 @@ CREATE TABLE plano
   stripe_price_id TEXT   NOT NULL UNIQUE,
 
   CONSTRAINT ck_titulo_plano
-    CHECK (titulo IN ('MENSAL', 'BIMESTRAL', 'TRIMESTRAL', 'SEMESTRAL', 'ANUAL')),
+    CHECK (titulo IN ('MENSAL', 'ANUAL')),
   CONSTRAINT ck_largura_stripe_price_id_plano
     CHECK (length(stripe_price_id) = 30)
 );
