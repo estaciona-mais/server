@@ -70,11 +70,14 @@ public class ClienteService {
                 cliente.getUsuario().getEmail(),
                 cliente.getCriadoEm(),
                 cliente.getAviso(),
+                assinatura == null ? null : assinatura.getPlano().getTitulo(),
                 assinatura == null ? null : assinatura.getStatus());
     }
 
     public Optional<DadosCliente> buscarPorId(Long id) {
-        return listarTodos().stream().filter(usuario -> usuario.id().equals(id)).findFirst();
+        return listarTodos().stream()
+                .filter(usuario -> usuario.clienteId().equals(id))
+                .findFirst();
     }
 
     public Optional<DadosCliente> buscarCliente(ConsultaClienteRequest req) {
@@ -100,6 +103,7 @@ public class ClienteService {
                 cliente.getUsuario().getEmail(),
                 cliente.getCriadoEm(),
                 cliente.getAviso(),
+                assinatura.getPlano().getTitulo(),
                 assinatura.getStatus()));
     }
 
