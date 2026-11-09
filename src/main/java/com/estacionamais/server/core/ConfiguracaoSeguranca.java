@@ -42,7 +42,6 @@ public class ConfiguracaoSeguranca {
                         .permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/clientes",
                                 "/api/planos",
                                 "/api/vagas/ocupacao",
                                 "/api/veiculos/cores",
@@ -58,7 +57,6 @@ public class ConfiguracaoSeguranca {
                         .permitAll()
                         .requestMatchers(
                                 "/api/enderecos/**",
-                                "/api/movimentacoes/**",
                                 "/api/veiculos/**",
                                 "/api/vagas/**",
                                 "/api/movimentacoes/**",
